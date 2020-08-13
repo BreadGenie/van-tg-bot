@@ -1,0 +1,16 @@
+{
+  "name": "van-bot",
+  "version": "1.0.0",
+  "description": "Telegram group manager",
+  "main": "bot.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Bread Genie",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "mongoose": "^5.9.28",
+    "node-telegram-bot-api": "^0.50.0"
+  }
+}

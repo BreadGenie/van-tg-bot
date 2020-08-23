@@ -6,24 +6,25 @@ function scrapeIdol(bot, msg, foundIdol) {
   request(foundIdol[0].idolLink, (error, response, html2) => {
     const $ = cheerio.load(html2);
     const foundCSS = $('#content-wrap').children('style').html();
-    const idolPicLink = foundCSS.match(/https(.*?)jpg/g);
-    let idolDescription = "🕺💃 <u>Idol</u>\n\n<i>" + $('.profile-top').children('h4').text() + "</i>\n<b>Group:</b> " + $('.profile-top').children('span').text() + "\n";
+    const idolPicLink = foundCSS.match(/https(.*?)(jpg|png)/g);
+    let idolDescription = "🕺 <u>Idol</u> 💃\n\n<i>" + $('.profile-top').children('h4').text() + "</i>\n\n<b>Group:</b> " + $('.profile-top').children('span').text() + "\n";
     let idolDesc = [];
     $('.half p').each((i, el) => {
+      idolDesc.push($(el).prev().text());
       idolDesc.push($(el).text());
     });
-    idolDescription += "<b>Label:</b> " + idolDesc[0] + "\n<b>Nationality:</b> " + idolDesc[1] + "\n<b>Birthday:</b> " + idolDesc[2] + "\n<b>Blood Type:</b> " + idolDesc[3] + "\n<b>Height:</b> " + idolDesc[4];
-    if (idolDesc[5] !== undefined) {
-      idolDescription += "\n<b>Weight:</b> " + idolDesc[5];
+    for (var i = 0; i < idolDesc.length; i += 2) {
+      idolDescription += "<b>" + idolDesc[i] + ":</b> " + idolDesc[i + 1] + "\n";
     }
     $('.full p').each((i, el) => {
+      idolDesc.push($(el).prev().text());
       idolDesc.push($(el).text());
     });
-    let k = 0;
-    while (idolDesc[idolDesc.length - k - 1] === ' ' || idolDesc[idolDesc.length - k - 1] === '') {
-      k++;
+    if (idolDesc[idolDesc.length - 2] === 'SNS') {
+      idolDescription += "<b>" + idolDesc[idolDesc.length - 4] + ":</b> " + idolDesc[idolDesc.length - 3];
+    } else {
+      idolDescription += "<b>" + idolDesc[idolDesc.length - 2] + ":</b> " + idolDesc[idolDesc.length - 1];
     }
-    idolDescription += '\n<b>Position:</b> ' + idolDesc[idolDesc.length - k - 1];
     bot.sendPhoto(msg.chat.id, idolPicLink[0], {
       caption: idolDescription,
       reply_to_message_id: msg.message_id,
@@ -77,12 +78,21 @@ exports.group = (bot, msg, command) => {
               const $ = cheerio.load(html2);
               const foundCSS = $('#content-wrap').children('style').html();
               const idolPicLink = foundCSS.match(/https(.*?)jpg/g);
-              let groupDescription = "<b>Group:</b> " + $('.profile-top').children('h4').text() + "\n<b>Label:</b> " + $('p').children('.label').text();
+              let groupDescription = "<b>Group:</b> " + $('.profile-top').children('h4').text() + "\n";
+              if ($('p').children('.label').parent().prev().text() === '' || $('p').children('.label').parent().prev().text() === ' ') {
+                groupDescription += "\n" + $('.desc p').text() + "\n";
+              } else {
+                groupDescription += "<b>" + $('p').children('.label').parent().prev().text() + ":</b> " + $('p').children('.label').text() + "\n";
+              }
               let groupDebNFan = [];
               $('.half p').each((i, el) => {
+                groupDebNFan.push($(el).prev().text());
                 groupDebNFan.push($(el).text());
               });
-              groupDescription += "\n<b>Debut:</b> " + groupDebNFan[0] + "\n<b>Fandom:</b> " + groupDebNFan[1] + "\n<b>Members:</b>\n";
+              for (var i = 0; i < groupDebNFan.length; i += 2) {
+                groupDescription += "<b>" + groupDebNFan[i] + ":</b> " + groupDebNFan[i + 1] + "\n";
+              }
+              groupDescription += "<b>Members:</b>\n"
               $('.name a').each((i, el) => {
                 groupDescription += " <code>" + $(el).text() + "</code>\n";
               });
@@ -110,19 +120,34 @@ exports.group = (bot, msg, command) => {
 };
 
 exports.idol = (bot, msg, command) => {
-  let findIdol = command.input.split("/idol ")[1];
+  let findIdol = '';
   let findIdolGroup = '';
   if (findIdol === undefined) {
-    bot.sendMessage(msg.chat.id, "Send Group Name!", {
+    bot.sendMessage(msg.chat.id, "Send Idol Name!", {
       reply_to_message_id: msg.message_id
     });
   } else {
-    if (findIdol.includes(" ")) {
-      findIdol = command.input.split(" ")[1].toLowerCase();
-      findIdolGroup = command.input.split(" ")[2].toLowerCase();
+    if (command.input.includes('"')) {
+      findIdol = command.input.match(/(?<=")(.*?)(?=")/g)[0];
+      if (command.input.includes('" ')) {
+        findIdolGroup = command.input.split(" ")[3].toLowerCase();
+        findIdol = findIdol.toLowerCase();
+      } else {
+        findIdol = findIdol.toLowerCase();
+        findIdolGroup = undefined;
+      }
     } else {
-      findIdolGroup = undefined;
+      findIdol = command.input.split("/idol ")[1];
+      if (findIdol.includes(" ")) {
+        findIdolGroup = findIdol.split(" ")[1].toLowerCase();
+        findIdol = findIdol.split(" ")[0].toLowerCase();
+        console.log("->" + findIdol,"<-" + findIdolGroup);
+      } else {
+        findIdol = findIdol.toLowerCase();
+        findIdolGroup = undefined;
+      }
     }
+
     request('https://www.kpopmap.com/kpop-profile/', (err, res, html) => {
       if (!err && res.statusCode === 200) {
         let idols = [];
@@ -135,6 +160,7 @@ exports.idol = (bot, msg, command) => {
           });
         });
         if (findIdolGroup === undefined) {
+          console.log("foundIdol");
           const foundIdol = idols.filter(idol => idol.idolName === findIdol);
           if (foundIdol.length > 0) {
             if (foundIdol.length === 1) {
@@ -154,6 +180,7 @@ exports.idol = (bot, msg, command) => {
             idolNotFound(bot, msg);
           }
         } else {
+          console.log("aa");
           const foundIdol = idols.filter(idol => idol.idolName === findIdol && idol.idolGroup === findIdolGroup);
           if (foundIdol.length > 0) {
             scrapeIdol(bot, msg, foundIdol);

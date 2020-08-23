@@ -141,7 +141,6 @@ exports.idol = (bot, msg, command) => {
       if (findIdol.includes(" ")) {
         findIdolGroup = findIdol.split(" ")[1].toLowerCase();
         findIdol = findIdol.split(" ")[0].toLowerCase();
-        console.log("->" + findIdol,"<-" + findIdolGroup);
       } else {
         findIdol = findIdol.toLowerCase();
         findIdolGroup = undefined;
@@ -160,7 +159,6 @@ exports.idol = (bot, msg, command) => {
           });
         });
         if (findIdolGroup === undefined) {
-          console.log("foundIdol");
           const foundIdol = idols.filter(idol => idol.idolName === findIdol);
           if (foundIdol.length > 0) {
             if (foundIdol.length === 1) {
@@ -180,7 +178,6 @@ exports.idol = (bot, msg, command) => {
             idolNotFound(bot, msg);
           }
         } else {
-          console.log("aa");
           const foundIdol = idols.filter(idol => idol.idolName === findIdol && idol.idolGroup === findIdolGroup);
           if (foundIdol.length > 0) {
             scrapeIdol(bot, msg, foundIdol);

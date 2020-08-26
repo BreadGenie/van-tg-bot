@@ -7,7 +7,10 @@ function scrapeIdol(bot, msg, foundIdol) {
     const $ = cheerio.load(html2);
     const foundCSS = $('#content-wrap').children('style').html();
     const idolPicLink = foundCSS.match(/https(.*?)(jpg|png)/g);
-    let idolDescription = "🕺 <u>Idol</u> 💃\n\n<i>" + $('.profile-top').children('h4').text() + "</i>\n\n<b>Group:</b> " + $('.profile-top').children('span').text() + "\n";
+    let idolDescription = "🕺 <u>Idol</u> 💃\n\n<i>" + $('.profile-top').children('h4').text() + "</i>\n\n";
+    if ($('.profile-top').children('span').text() !== '') {
+      idolDescription += "<b>Group:</b> " + $('.profile-top').children('span').text() + "\n";
+    }
     let idolDesc = [];
     $('.half p').each((i, el) => {
       idolDesc.push($(el).prev().text());
@@ -77,7 +80,7 @@ exports.group = (bot, msg, command) => {
             if (!err && res.statusCode === 200) {
               const $ = cheerio.load(html2);
               const foundCSS = $('#content-wrap').children('style').html();
-              const idolPicLink = foundCSS.match(/https(.*?)jpg/g);
+              const idolPicLink = foundCSS.match(/https(.*?)(jpg|png)/g);
               let groupDescription = "<b>Group:</b> " + $('.profile-top').children('h4').text() + "\n";
               if ($('p').children('.label').parent().prev().text() === '' || $('p').children('.label').parent().prev().text() === ' ') {
                 groupDescription += "\n" + $('.desc p').text() + "\n";
@@ -122,7 +125,7 @@ exports.group = (bot, msg, command) => {
 exports.idol = (bot, msg, command) => {
   let findIdol = '';
   let findIdolGroup = '';
-  if (findIdol === undefined) {
+  if (command.input === '/idol') {
     bot.sendMessage(msg.chat.id, "Send Idol Name!", {
       reply_to_message_id: msg.message_id
     });
@@ -130,7 +133,7 @@ exports.idol = (bot, msg, command) => {
     if (command.input.includes('"')) {
       findIdol = command.input.match(/(?<=")(.*?)(?=")/g)[0];
       if (command.input.includes('" ')) {
-        findIdolGroup = command.input.split(" ")[3].toLowerCase();
+        findIdolGroup = command.input.split(" ")[command.input.split(" ").length - 1].toLowerCase();
         findIdol = findIdol.toLowerCase();
       } else {
         findIdol = findIdol.toLowerCase();
@@ -146,7 +149,6 @@ exports.idol = (bot, msg, command) => {
         findIdolGroup = undefined;
       }
     }
-
     request('https://www.kpopmap.com/kpop-profile/', (err, res, html) => {
       if (!err && res.statusCode === 200) {
         let idols = [];

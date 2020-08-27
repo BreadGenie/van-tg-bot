@@ -2,6 +2,7 @@ const TelegramBot = require('node-telegram-bot-api');
 require('dotenv').config();
 const help = require(__dirname + '/modules/help.js');
 const scrape = require(__dirname + '/modules/webscrape.js');
+const random = require(__dirname + '/modules/random.js');
 const token = process.env.TELEGRAM_TOKEN;
 const url = process.env.APP_URL;
 let options = {};
@@ -28,6 +29,10 @@ bot.onText(/^\/group($| )/, (msg, command) => {
 
 bot.onText(/^\/idol($| )/, (msg, command) => {
   scrape.idol(bot, msg, command);
+});
+
+bot.onText(/^\/random($| )/, (msg, command) => {
+  random.random(bot, msg, command);
 });
 
 bot.onText(/^\/help($|@VanBT21_Bot)/, msg => {

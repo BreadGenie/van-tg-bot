@@ -3,6 +3,7 @@ require('dotenv').config();
 const mongoose = require('mongoose');
 const help = require(__dirname + '/modules/help.js');
 const scrape = require(__dirname + '/modules/webscrape.js');
+const inline = require(__dirname + '/modules/inline.js');
 const random = require(__dirname + '/modules/random.js');
 const token = process.env.TELEGRAM_TOKEN;
 const url = process.env.APP_URL;
@@ -58,6 +59,10 @@ bot.onText(/^\/flag$/, msg => {
       reply_to_message_id: msg.message_id
     });
   }
+});
+
+bot.on('inline_query', (query) => {
+  inline.group(bot, query);
 });
 
 bot.onText(/^\/random($| )/, (msg, command) => {

@@ -34,7 +34,7 @@ exports.group = (bot, query) => {
             const $ = cheerio.load(html2);
             const foundCSS = $('#content-wrap').children('style').html();
             const idolPicLink = foundCSS.match(/https(.*?)(jpg|png)/g);
-            const groupName = $('.profile-top').children('h4').text();
+            const groupName = $('.profile-top').text().trim();
             const groupLabel = $('p').children('.label').text();
             let groupDescription = "<b>Group:</b> " + '<a href="' + idolPicLink[0] + '">' + groupName + "</a>\n";
             if ($('p').children('.label').parent().prev().text() === '' || $('p').children('.label').parent().prev().text() === ' ') {

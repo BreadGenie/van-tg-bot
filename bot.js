@@ -1,6 +1,7 @@
 const TelegramBot = require('node-telegram-bot-api');
 require('dotenv').config();
 const help = require(__dirname + '/modules/help.js');
+const group = require(__dirname + '/modules/group.js');
 const scrape = require(__dirname + '/modules/webscrape.js');
 const inline = require(__dirname + '/modules/inline.js');
 const token = process.env.TELEGRAM_TOKEN;
@@ -23,7 +24,7 @@ bot.on('inline_query', (query) => {
 });
 
 bot.onText(/^\/group($| )/, (msg, command) => {
-  scrape.group(bot, msg, command);
+  group.sendGroup(bot, msg, command);
 });
 
 bot.onText(/^\/idol($| )/, (msg, command) => {

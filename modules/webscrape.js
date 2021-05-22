@@ -7,7 +7,7 @@ function scrapeIdol(bot, msg, foundIdol) {
     const $ = cheerio.load(html2);
     const foundCSS = $('#content-wrap').children('style').html();
     const idolPicLink = foundCSS.match(/https(.*?)(jpg|png)/g);
-    let idolDescription = "🕺 <u>Idol</u> 💃\n\n<i>" + $('.profile-top').children('h4').text() + "</i>\n\n";
+    let idolDescription = "🕺 <u>Idol</u> 💃\n\n<i>" + $('.profile-top > h2').text() + "</i>\n\n";
     if ($('.profile-top').children('span').text() !== '') {
       idolDescription += "<b>Group:</b> " + $('.profile-top').children('span').text() + "\n";
     }
@@ -153,7 +153,7 @@ exports.idol = (bot, msg, command) => {
       if (!err && res.statusCode === 200) {
         let idols = [];
         const $ = cheerio.load(html);
-        $('p a').each((i, el) => {
+        $('.name > a').each((i, el) => {
           idols.push({
             idolName: $(el).text().toLowerCase(),
             idolGroup: $(el).next().text().toLowerCase(),

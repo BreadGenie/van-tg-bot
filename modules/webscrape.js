@@ -81,7 +81,7 @@ exports.group = (bot, msg, command) => {
               const $ = cheerio.load(html2);
               const foundCSS = $('#content-wrap').children('style').html();
               const idolPicLink = foundCSS.match(/https(.*?)(jpg|png)/g);
-              let groupDescription = "<b>Group:</b> " + $('.profile-top').children('h4').text() + "\n";
+              let groupDescription = "<b>Group:</b> " + $('.profile-top').text().trim() + "\n";
               if ($('p').children('.label').parent().prev().text() === '' || $('p').children('.label').parent().prev().text() === ' ') {
                 groupDescription += "\n" + $('.desc p').text() + "\n";
               } else {

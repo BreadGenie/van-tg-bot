@@ -11,8 +11,8 @@
   "dependencies": {
     "cheerio": "^1.0.0-rc.3",
     "dotenv": "^8.2.0",
-    "mongoose": "^5.10.1",
-    "node-telegram-bot-api": "^0.50.0",
-    "request": "^2.88.2"
+    "mongoose": "^5.12.10",
+    "node-fetch": "^2.6.1",
+    "node-telegram-bot-api": "^0.50.0"
   }
 }

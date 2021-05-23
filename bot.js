@@ -3,7 +3,7 @@ require('dotenv').config();
 const help = require(__dirname + '/modules/help.js');
 const group = require(__dirname + '/modules/group.js');
 const idol = require(__dirname + '/modules/idol.js');
-const inline = require(__dirname + '/modules/inline.js');
+const inline = require(__dirname + '/modules/inlineGroup.js');
 const helper = require(__dirname + '/helper.js');
 const token = process.env.TELEGRAM_TOKEN;
 const url = process.env.APP_URL;
@@ -20,12 +20,12 @@ const bot = new TelegramBot(token, options);
 
 bot.setWebHook(`${url}/bot${token}`);
 
-bot.on('inline_query', (query) => {
-  inline.group(bot, query);
+bot.on('inline_query', async (query) => {
+  await inline.group(bot, query);
 });
 
 bot.onText(/^\/group($| )/, async (msg, command) => {
-  const result = await group.sendGroup(bot, msg, command);
+  const result = await group.sendGroup(command);
   await helper.sendReply(bot, msg, result);
 });
 

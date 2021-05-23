@@ -2,7 +2,7 @@ const cheerio = require('cheerio');
 const fetch = require('node-fetch');
 let f = 0;
 
-exports.sendGroup = async (bot, msg, command) => {
+exports.sendGroup = async (command) => {
     let findGroup = command.input.split("/group ")[1];
     if (findGroup === undefined) {
         return ("Send Group Name!");

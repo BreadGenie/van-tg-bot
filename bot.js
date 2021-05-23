@@ -23,8 +23,22 @@ bot.on('inline_query', (query) => {
   inline.group(bot, query);
 });
 
-bot.onText(/^\/group($| )/, (msg, command) => {
-  group.sendGroup(bot, msg, command);
+bot.onText(/^\/group($| )/, async (msg, command) => {
+  const result = await group.sendGroup(bot, msg, command);
+  
+  if (typeof result === "string") {
+    bot.sendMessage(msg.chat.id, result, {
+      reply_to_message_id: msg.message_id
+    });
+  } else {
+    const [idolPicLink, groupDescription] = result;
+
+    bot.sendPhoto(msg.chat.id, idolPicLink, {
+      caption: groupDescription,
+      reply_to_message_id: msg.message_id,
+      parse_mode: "HTML"
+    });
+  }
 });
 
 bot.onText(/^\/idol($| )/, (msg, command) => {
@@ -42,3 +56,5 @@ bot.onText(/^\/start($|@VanBT21_Bot)/, msg => {
     });
   }
 });
+
+bot.on("polling_error", console.log);

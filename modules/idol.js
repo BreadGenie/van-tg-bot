@@ -7,12 +7,12 @@ const scrapeIdol = async (foundIdol) => {
 
   $ = cheerio.load(body);
 
-  const foundCSS = $('#content-wrap').children('style').html();
+  const foundCSS = $('#content-wrap > style').html();
   const idolPicLink = foundCSS.match(/https(.*?)(jpg|png)/g);
   let idolDescription = "<u>Idol</u>\n\n<i>" + $('.profile-top > h2').text() + "</i>\n\n";
 
-  if ($('.profile-top').children('span').text() !== '') {
-    idolDescription += "<b>Group:</b> " + $('.profile-top').children('span').text() + "\n";
+  if ($('.profile-top > span').text() !== '') {
+    idolDescription += "<b>Group:</b> " + $('.profile-top > span').text() + "\n";
   }
 
   let idolDesc = [];

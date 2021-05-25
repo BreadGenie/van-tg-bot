@@ -42,14 +42,14 @@ exports.sendGroup = async (command) => {
             const html = await groupResult.text();
 
             const $ = cheerio.load(html);
-            const foundCSS = $('#content-wrap').children('style').html();
+            const foundCSS = $('#content-wrap > style').html();
             const idolPicLink = foundCSS.match(/https(.*?)(jpg|png)/g);
             let groupDescription = "<b>Group:</b> " + $('.profile-top').text().trim() + "\n";
 
-            if ($('p').children('.label').parent().prev().text() === '' || $('p').children('.label').parent().prev().text() === ' ') {
+            if ($('p > .label').parent().prev().text() === '' || $('p > .label').parent().prev().text() === ' ') {
                 groupDescription += "\n" + $('.desc p').text() + "\n";
             } else {
-                groupDescription += "<b>" + $('p').children('.label').parent().prev().text() + ":</b> " + $('p').children('.label').text() + "\n";
+                groupDescription += "<b>" + $('p > .label').parent().prev().text() + ":</b> " + $('p > .label').text() + "\n";
             }
 
             let groupDebNFan = [];

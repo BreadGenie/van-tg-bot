@@ -1,5 +1,6 @@
 const cheerio = require('cheerio');
 const fetch = require('node-fetch');
+const fs = require('fs');
 
 const scrapeIdol = async (foundIdol) => {
   const result = await fetch(foundIdol[0].idolLink);
@@ -70,19 +71,8 @@ exports.sendIdol = async (command) => {
       }
     }
 
-    const result = await fetch('https://www.kpopmap.com/kpop-profile/');
-    const body = await result.text();
-
-    $ = cheerio.load(body);
-    let idols = [];
-
-    $('.name > a').each((i, el) => {
-      idols.push({
-        idolName: $(el).text().toLowerCase(),
-        idolGroup: $(el).next().text().toLowerCase(),
-        idolLink: $(el).attr('href')
-      });
-    });
+    const rawdata = fs.readFileSync('./data/idols.json');
+    const idols = JSON.parse(rawdata);
 
     if (findIdolGroup === undefined) {
       const foundIdol = idols.filter(idol => idol.idolName === findIdol);

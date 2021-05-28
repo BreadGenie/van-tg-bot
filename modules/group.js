@@ -1,6 +1,6 @@
 const cheerio = require('cheerio');
 const fetch = require('node-fetch');
-let f = 0;
+const fs = require('fs');
 
 exports.sendGroup = async (command) => {
     let findGroup = command.input.split("/group ")[1];
@@ -9,31 +9,8 @@ exports.sendGroup = async (command) => {
     } else {
         findGroup = findGroup.toLowerCase();
 
-        const result = await fetch('https://www.kpopmap.com/kpop-member-profile/');
-        const body = await result.text();
-
-        $ = cheerio.load(body);
-        groups = []
-
-        $('li a').each((i, el) => {
-            if (f === 0) {
-                if ($(el).text() === '(G)I-DLE') {
-                    f = 1;
-                    groups.push({
-                        groupName: $(el).text().toLowerCase(),
-                        groupLink: $(el).attr('href')
-                    });
-                }
-            } else {
-                groups.push({
-                    groupName: $(el).text().toLowerCase(),
-                    groupLink: $(el).attr('href')
-                });
-                if ($(el).text() === 'Z-Girls T.P.I') {
-                    f = 0;
-                }
-            }
-        });
+        const rawdata = fs.readFileSync('./data/groups.json');
+        const groups = JSON.parse(rawdata);
 
         const foundGroup = groups.find(group => group.groupName === findGroup);
 

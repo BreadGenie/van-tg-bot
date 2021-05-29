@@ -3,7 +3,7 @@ require('dotenv').config();
 const help = require(__dirname + '/modules/help.js');
 const group = require(__dirname + '/modules/group.js');
 const idol = require(__dirname + '/modules/idol.js');
-const inline = require(__dirname + '/modules/inlineGroup.js');
+const inline = require(__dirname + '/modules/inline.js');
 const reply = require(__dirname + '/utils/reply.js');
 const token = process.env.TELEGRAM_TOKEN;
 const url = process.env.APP_URL;

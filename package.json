@@ -1,17 +1,16 @@
 {
-  "name": "van-bot",
+  "name": "van-tg-bot",
   "version": "1.0.0",
-  "description": "Telegram group manager",
+  "description": "A K-Pop Bot for Telegram ",
   "main": "bot.js",
   "scripts": {
     "test": "jest"
   },
   "author": "Bread Genie",
-  "license": "ISC",
+  "license": "GPL-3.0",
   "dependencies": {
-    "cheerio": "^1.0.0-rc.3",
-    "dotenv": "^8.2.0",
-    "mongoose": "^5.12.10",
+    "cheerio": "^1.0.0-rc.9",
+    "dotenv": "^8.6.0",
     "node-fetch": "^2.6.1",
     "node-telegram-bot-api": "^0.50.0"
   },

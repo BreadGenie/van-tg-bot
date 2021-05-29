@@ -3,11 +3,10 @@ const fetch = require('node-fetch');
 const fs = require('fs');
 
 exports.sendGroup = async (command) => {
-    let findGroup = command.input.split("/group ")[1];
-    if (findGroup === undefined) {
+    if (command === '') {
         return ("Send Group Name!");
     } else {
-        findGroup = findGroup.toLowerCase();
+        const findGroup = command.toLowerCase();
 
         const rawdata = fs.readFileSync('./data/groups.json');
         const groups = JSON.parse(rawdata);

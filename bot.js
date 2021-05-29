@@ -24,13 +24,14 @@ bot.on('inline_query', async (query) => {
   await inline.group(bot, query);
 });
 
-bot.onText(/^\/group($| )/, async (msg, command) => {
-  const result = await group.sendGroup(command);
+bot.onText(/^\/group(@VanBT21_Bot)? ?(.*)/, async (msg, command) => {
+  console.log(command);
+  const result = await group.sendGroup(command[2]);
   await reply.sendReply(bot, msg, result);
 });
 
-bot.onText(/^\/idol($| )/, async (msg, command) => {
-  const result = await idol.sendIdol(command);
+bot.onText(/^\/idol(@VanBT21_Bot)? ?(.*)/, async (msg, command) => {
+  const result = await idol.sendIdol(command[2]);
   await reply.sendReply(bot, msg, result);
 });
 

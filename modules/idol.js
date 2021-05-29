@@ -2,6 +2,8 @@ const cheerio = require('cheerio');
 const fetch = require('node-fetch');
 const fs = require('fs');
 
+const idolNotFound = "Idol not found!\nPlease check your spelling and make sure the given name is a <b>Stage Name</b>";
+
 const scrapeIdol = async (foundIdol) => {
   const result = await fetch(foundIdol[0].idolLink);
   const body = await result.text();
@@ -41,32 +43,27 @@ const scrapeIdol = async (foundIdol) => {
   return ([idolPicLink[0], idolDescription]);
 };
 
-const idolNotFound = async () => {
-  return ("Idol not found!\nPlease check your spelling and make sure the given name is a <b>Stage Name</b>");
-};
-
 exports.sendIdol = async (command) => {
   let findIdol = '';
   let findIdolGroup = '';
-  if (command.input === '/idol') {
+  if (command === '') {
     return ("Send Idol Name!");
   } else {
-    if (command.input.includes('"')) {
-      findIdol = command.input.match(/(?<=")(.*?)(?=")/g)[0];
-      if (command.input.includes('" ')) {
-        findIdolGroup = command.input.split(" ")[command.input.split(" ").length - 1].toLowerCase();
+    if (command.includes('"')) {
+      findIdol = command.match(/(?<=")(.*?)(?=")/g)[0];
+      if (command.includes('" ')) {
+        findIdolGroup = command.replace(`"${findIdol}" `, "").toLowerCase();
         findIdol = findIdol.toLowerCase();
       } else {
         findIdol = findIdol.toLowerCase();
         findIdolGroup = undefined;
       }
     } else {
-      findIdol = command.input.split("/idol ")[1];
-      if (findIdol.includes(" ")) {
-        findIdolGroup = findIdol.split(" ")[1].toLowerCase();
-        findIdol = findIdol.split(" ")[0].toLowerCase();
+      if (command.includes(" ")) {
+        findIdol = command.split(" ")[0].toLowerCase();
+        findIdolGroup = command.split(" ")[1].toLowerCase();
       } else {
-        findIdol = findIdol.toLowerCase();
+        findIdol = command.toLowerCase();
         findIdolGroup = undefined;
       }
     }
@@ -88,14 +85,14 @@ exports.sendIdol = async (command) => {
           return (foundIdols);
         }
       } else {
-        return (await idolNotFound());
+        return idolNotFound;
       }
     } else {
       const foundIdol = idols.filter(idol => idol.idolName === findIdol && idol.idolGroup === findIdolGroup);
       if (foundIdol.length > 0) {
         return (await scrapeIdol(foundIdol));
       } else {
-        return (await idolNotFound());
+        return idolNotFound;
       }
     }
   }

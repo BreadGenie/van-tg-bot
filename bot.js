@@ -21,11 +21,10 @@ const bot = new TelegramBot(token, options);
 bot.setWebHook(`${url}/bot${token}`);
 
 bot.on('inline_query', async (query) => {
-  await inline.group(bot, query);
+  await inline.inline(bot, query);
 });
 
 bot.onText(/^\/group(@VanBT21_Bot)? ?(.*)/, async (msg, command) => {
-  console.log(command);
   const result = await group.sendGroup(command[2]);
   await reply.sendReply(bot, msg, result);
 });

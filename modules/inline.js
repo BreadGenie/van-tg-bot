@@ -12,14 +12,14 @@ const getMultipleIdols = async (query, idolResult) => {
   let output = [];
   await asyncForEach(idolResult, async (result) => {
     await waitFor(50);
-    const idolCommand = { input: "/idol " + result.toLowerCase() };
+    const idolCommand = result.toLowerCase();
     const idolResult = await idol.sendIdol(idolCommand);
 
     if (typeof idolResult !== 'string') {
       let [idolPicLink, idolDescription] = idolResult;
 
       const idolName = idolDescription.match(/<i>(.*?)<\/i>/g)[0].split('<i>')[1].replace("<\/i>", "");
-      const groupName = idolDescription.match(/<b>Group:<\/b> (.*?)\n/g)[0].split('<b>Group:<\/b> ')[1];
+      const groupName = idolDescription.includes("<b>Group:<\/b>") ? idolDescription.match(/<b>Group:<\/b> (.*?)\n/g)[0].split('<b>Group:<\/b> ')[1] : "";
 
       const linkedIdolName = '<a href="' + idolPicLink + '">' + idolName + "</a>";
       idolDescription = idolDescription.replace(idolName, linkedIdolName);
@@ -40,17 +40,19 @@ const getMultipleIdols = async (query, idolResult) => {
   return output;
 }
 
-exports.group = async (bot, query) => {
-  const groupCommand = { input: "/group " + query.query.toLowerCase() };
-  const idolCommand = { input: "/idol " + query.query.toLowerCase() };
-  const groupResult = await group.sendGroup(groupCommand);
-  const idolResult = await idol.sendIdol(idolCommand);
+exports.inline = async (bot, query) => {
+  const command = query.query.trim().toLowerCase();
+  const groupResult = await group.sendGroup(command);
+  const idolResult = await idol.sendIdol(command);
 
-  if (groupResult !== "Group not found!") {
+  if (groupResult === "Send Group Name!" && idolResult === "Send Idol Name!") {
+    return 0;
+  }
+  else if (groupResult !== "Group not found!") {
     let [groupPicLink, groupDescription] = groupResult;
 
     const groupName = groupDescription.match(/<b>Group:<\/b> (.*?)\n/g)[0].split('<b>Group:<\/b> ')[1];
-    const groupLabel = groupDescription.match(/<b>Label:<\/b> (.*?)\n/g)[0].split('<b>Label:<\/b> ')[1];
+    const groupLabel = groupDescription.includes("Label") ? groupDescription.match(/<b>Label:<\/b> (.*?)\n/g)[0].split('<b>Label:<\/b> ')[1] : "";
 
     const linkedGroupName = '<a href="' + groupPicLink + '">' + groupName + "</a>";
     groupDescription = groupDescription.replace(groupName, linkedGroupName);
@@ -78,7 +80,7 @@ exports.group = async (bot, query) => {
       let [idolPicLink, idolDescription] = idolResult;
 
       const idolName = idolDescription.match(/<i>(.*?)<\/i>/g)[0].split('<i>')[1].replace("<\/i>", "");
-      const groupName = idolDescription.match(/<b>Group:<\/b> (.*?)\n/g)[0].split('<b>Group:<\/b> ')[1];
+      const groupName = idolDescription.includes("<b>Group:<\/b>") ? idolDescription.match(/<b>Group:<\/b> (.*?)\n/g)[0].split('<b>Group:<\/b> ')[1] : "";
 
       const linkedIdolName = '<a href="' + idolPicLink + '">' + idolName + "</a>";
       idolDescription = idolDescription.replace(idolName, linkedIdolName);

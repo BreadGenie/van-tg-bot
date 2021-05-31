@@ -4,7 +4,8 @@ const help = require(__dirname + '/modules/help.js');
 const group = require(__dirname + '/modules/group.js');
 const idol = require(__dirname + '/modules/idol.js');
 const inline = require(__dirname + '/modules/inline.js');
-const reply = require(__dirname + '/utils/reply.js');
+const reply = require(__dirname + '/helpers/reply.js');
+const strings = require(__dirname + '/helpers/strings.js');
 const token = process.env.TELEGRAM_TOKEN;
 const url = process.env.APP_URL;
 
@@ -40,7 +41,7 @@ bot.onText(/^\/help($|@VanBT21_Bot)/, msg => {
 
 bot.onText(/^\/start($|@VanBT21_Bot)/, async msg => {
   if (!("forward_from" in msg)) {
-    await reply.sendReply(bot, msg, "Hey, I am Van.\nA K-Pop DB Telegram bot!\n\nUse /help to view the functions of the bot");
+    await reply.sendReply(bot, msg, strings.START_STRING);
   }
 });
 

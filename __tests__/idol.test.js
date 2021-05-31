@@ -1,4 +1,5 @@
 const idol = require(__dirname + '/../modules/idol.js')
+const strings = require(__dirname + '/../helpers/strings.js')
 
 describe('/idol tests', () => {
 

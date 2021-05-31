@@ -1,5 +1,6 @@
 const group = require(__dirname + '/group.js');
 const idol = require(__dirname + '/idol.js');
+const strings = require(__dirname + '/../helpers/strings.js')
 
 const waitFor = (ms) => new Promise(r => setTimeout(r, ms))
 const asyncForEach = async (array, callback) => {
@@ -45,10 +46,10 @@ exports.inline = async (bot, query) => {
   const groupResult = await group.sendGroup(command);
   const idolResult = await idol.sendIdol(command);
 
-  if (groupResult === "Send Group Name!" && idolResult === "Send Idol Name!") {
+  if (groupResult === strings.SEND_GP && idolResult === strings.SEND_ID) {
     return 0;
   }
-  else if (groupResult !== "Group not found!") {
+  else if (groupResult !== strings.NO_GP) {
     let [groupPicLink, groupDescription] = groupResult;
 
     const groupName = groupDescription.match(/<b>Group:<\/b> (.*?)\n/g)[0].split('<b>Group:<\/b> ')[1];
@@ -70,7 +71,7 @@ exports.inline = async (bot, query) => {
     }];
 
     bot.answerInlineQuery(query.id, output);
-  } else if (idolResult !== "Idol not found!\nPlease check your spelling and make sure the given name is a <b>Stage Name</b>") {
+  } else if (idolResult !== strings.NO_ID) {
     let output = [];
     if (typeof idolResult === 'string') {
       const idolResultArray = idolResult.replace(/ -/g, "").replace("Found Multiple Results:\n\n", "").replace("\n\nUse /idol &lt;idol-name&gt; &lt;group-name&gt;", "").split("\n");

@@ -1,8 +1,7 @@
 const cheerio = require('cheerio');
 const fetch = require('node-fetch');
 const fs = require('fs');
-
-const idolNotFound = "Idol not found!\nPlease check your spelling and make sure the given name is a <b>Stage Name</b>";
+const strings = require('../helpers/strings');
 
 const scrapeIdol = async (foundIdol) => {
   const result = await fetch(foundIdol[0].idolLink);
@@ -47,7 +46,7 @@ exports.sendIdol = async (command) => {
   let findIdol = '';
   let findIdolGroup = '';
   if (command === '') {
-    return ("Send Idol Name!");
+    return (strings.SEND_ID);
   } else {
     if (command.includes('"')) {
       findIdol = command.match(/(?<=")(.*?)(?=")/g)[0];
@@ -85,14 +84,14 @@ exports.sendIdol = async (command) => {
           return (foundIdols);
         }
       } else {
-        return idolNotFound;
+        return strings.NO_ID;
       }
     } else {
       const foundIdol = idols.filter(idol => idol.idolName === findIdol && idol.idolGroup === findIdolGroup);
       if (foundIdol.length > 0) {
         return (await scrapeIdol(foundIdol));
       } else {
-        return idolNotFound;
+        return strings.NO_ID;
       }
     }
   }

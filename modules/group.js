@@ -1,10 +1,11 @@
 const cheerio = require('cheerio');
 const fetch = require('node-fetch');
 const fs = require('fs');
+const strings = require('../helpers/strings');
 
 exports.sendGroup = async (command) => {
     if (command === '') {
-        return ("Send Group Name!");
+        return (strings.SEND_GP);
     } else {
         const findGroup = command.toLowerCase();
 
@@ -48,7 +49,7 @@ exports.sendGroup = async (command) => {
             return ([idolPicLink[0], groupDescription]);
 
         } else {
-            return ("Group not found!");
+            return (strings.NO_GP);
         }
     }
 }

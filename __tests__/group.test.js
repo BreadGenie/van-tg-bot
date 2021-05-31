@@ -1,4 +1,5 @@
-const group = require(__dirname + '/../modules/group.js')
+const group = require(__dirname + '/../modules/group.js');
+const strings = require(__dirname + '/../helpers/strings.js');
 
 describe('/group tests', () => {
 
@@ -12,14 +13,14 @@ describe('/group tests', () => {
 
     test('it should ask to send group name if no group provided', async () => {
         const output = await group.sendGroup('');
-        const final = 'Send Group Name!';
+        const final = strings.SEND_GP;
 
         expect(output).toBe(final);
     });
 
     test('it should output group not found if no group found in the site', async () => {
         const output = await group.sendGroup('DTS');
-        const final = 'Group not found!';
+        const final = strings.NO_GP;
 
         expect(output).toBe(final);
     });

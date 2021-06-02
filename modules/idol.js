@@ -67,7 +67,7 @@ exports.sendIdol = async (command) => {
       }
     }
 
-    const rawdata = fs.readFileSync('./data/idols.json');
+    const rawdata = fs.readFileSync('idols.json');
     const idols = JSON.parse(rawdata);
 
     if (findIdolGroup === undefined) {

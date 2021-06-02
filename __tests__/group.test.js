@@ -1,12 +1,14 @@
 const group = require(__dirname + '/../modules/group.js');
 const strings = require(__dirname + '/../helpers/strings.js');
 const scraper = require(__dirname + '/../helpers/scrapeAll.js');
-
-beforeAll(async () => {
-    return await scraper.scrapeNStore();
-});
+const path = require('path');
+const fs = require('fs');
 
 describe('/group tests', () => {
+
+    beforeAll(async () => {
+        return await scraper.scrapeGroupList();
+    });
 
     test('it should check if group details are returned properly', async () => {
         const [groupPicLink, groupDescription] = await group.sendGroup('bts');
@@ -28,5 +30,13 @@ describe('/group tests', () => {
         const final = strings.NO_GP;
 
         expect(output).toBe(final);
+    });
+
+    afterAll(() => {
+        return fs.unlink(path.join(__dirname + '/../groups.json'), err => {
+            if (err) {
+                console.log(err);
+            }
+        });
     });
 });

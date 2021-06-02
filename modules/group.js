@@ -9,7 +9,7 @@ exports.sendGroup = async (command) => {
     } else {
         const findGroup = command.toLowerCase();
 
-        const rawdata = fs.readFileSync('./data/groups.json');
+        const rawdata = fs.readFileSync('groups.json');
         const groups = JSON.parse(rawdata);
 
         const foundGroup = groups.find(group => group.groupName === findGroup);

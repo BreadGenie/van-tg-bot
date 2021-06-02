@@ -11,6 +11,7 @@
   "dependencies": {
     "cheerio": "^1.0.0-rc.9",
     "dotenv": "^8.6.0",
+    "node-cron": "^3.0.0",
     "node-fetch": "^2.6.1",
     "node-telegram-bot-api": "^0.50.0"
   },

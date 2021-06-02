@@ -1,4 +1,5 @@
 const TelegramBot = require('node-telegram-bot-api');
+const cron = require('node-cron');
 require('dotenv').config();
 const help = require(__dirname + '/modules/help.js');
 const group = require(__dirname + '/modules/group.js');
@@ -6,6 +7,7 @@ const idol = require(__dirname + '/modules/idol.js');
 const inline = require(__dirname + '/modules/inline.js');
 const reply = require(__dirname + '/helpers/reply.js');
 const strings = require(__dirname + '/helpers/strings.js');
+const scraper = require(__dirname + '/helpers/scrapeAll.js');
 const token = process.env.TELEGRAM_TOKEN;
 const url = process.env.APP_URL;
 
@@ -20,6 +22,14 @@ const options = process.env.PORT === undefined ? {
 const bot = new TelegramBot(token, options);
 
 bot.setWebHook(`${url}/bot${token}`);
+
+(async () => {
+	await scraper.scrapeNStore();
+})();
+
+cron.schedule('0 0 * * *', async () => {
+	await scraper.scrapeNStore();
+});
 
 bot.on('inline_query', async (query) => {
   await inline.inline(bot, query);

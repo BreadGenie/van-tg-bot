@@ -1,7 +1,14 @@
 const idol = require(__dirname + '/../modules/idol.js')
 const strings = require(__dirname + '/../helpers/strings.js')
+const scraper = require(__dirname + '/../helpers/scrapeAll.js');
+const path = require('path');
+const fs = require('fs');
 
 describe('/idol tests', () => {
+
+    beforeAll(async () => {
+        return await scraper.scrapeIdolList();
+    });
 
     test('it should check if idol details are returned properly (group)', async () => {
         const [idolPicLink, idolDescription] = await idol.sendIdol('jin bts');
@@ -38,5 +45,13 @@ describe('/idol tests', () => {
         const final = 'Idol not found!\nPlease check your spelling and make sure the given name is a <b>Stage Name</b>';
 
         expect(output).toBe(final);
+    });
+
+    afterAll(() => {
+        return fs.unlink(path.join(__dirname + '/../idols.json'), err => {
+            if (err) {
+                console.log(err);
+            }
+        });
     });
 });

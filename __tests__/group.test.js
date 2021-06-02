@@ -1,5 +1,10 @@
 const group = require(__dirname + '/../modules/group.js');
 const strings = require(__dirname + '/../helpers/strings.js');
+const scraper = require(__dirname + '/../helpers/scrapeAll.js');
+
+beforeAll(async () => {
+    return await scraper.scrapeNStore();
+});
 
 describe('/group tests', () => {
 

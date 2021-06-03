@@ -10,7 +10,7 @@ describe('/group tests', () => {
         return await scraper.scrapeGroupList();
     });
 
-    test('it should check if group details are returned properly', async () => {
+    test('should check if group details are returned properly', async () => {
         const [groupPicLink, groupDescription] = await group.sendGroup('bts');
         const details = "<b>Group:</b> BTS (방탄소년단)\n<b>Label:</b> BIGHIT MUSIC\n<b>Debut:</b> Jun 2013\n<b>Official Fandom:</b> ARMY\n<b>Members:</b>\n <code>Jin</code>\n <code>Suga</code>\n <code>J-Hope</code>\n <code>RM</code>\n <code>Jimin</code>\n <code>V</code>\n <code>JungKook</code>\n"
 
@@ -18,18 +18,16 @@ describe('/group tests', () => {
         expect(groupPicLink).toMatch(/https:\/\/image.kpopmap.com\/(.*).jpg/);
     });
 
-    test('it should ask to send group name if no group provided', async () => {
+    test('should ask to send group name if no group provided', async () => {
         const output = await group.sendGroup('');
-        const final = strings.SEND_GP;
 
-        expect(output).toBe(final);
+        expect(output).toBe(strings.SEND_GP);
     });
 
-    test('it should output group not found if no group found in the site', async () => {
+    test('should output group not found if no group found in the site', async () => {
         const output = await group.sendGroup('DTS');
-        const final = strings.NO_GP;
 
-        expect(output).toBe(final);
+        expect(output).toBe(strings.NO_GP);
     });
 
     afterAll(() => {

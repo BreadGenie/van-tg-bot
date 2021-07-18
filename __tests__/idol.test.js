@@ -1,6 +1,6 @@
-const idol = require(__dirname + '/../modules/idol.js')
-const strings = require(__dirname + '/../helpers/strings.js')
-const scraper = require(__dirname + '/../helpers/scrapeAll.js');
+const idol = require(__dirname + '/../src/modules/idol.js')
+const strings = require(__dirname + '/../src/helpers/strings.js')
+const scraper = require(__dirname + '/../src/helpers/scrapeAll.js');
 const path = require('path');
 const fs = require('fs');
 

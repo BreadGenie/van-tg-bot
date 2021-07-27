@@ -15,9 +15,9 @@ const scrapeIdol = async (foundIdol) => {
   let idolDescription =
     '<u>Idol</u>\n\n<i>' + $('.profile-top > h2').text() + '</i>\n\n';
 
-  if ($('.profile-top > span').text() !== '') {
+  if ($('.profile-top .group').text() !== '') {
     idolDescription +=
-      '<b>Group:</b> ' + $('.profile-top > span').text() + '\n';
+      '<b>Group:</b> ' + $('.profile-top .group').text() + '\n';
   }
 
   const idolDesc = [];

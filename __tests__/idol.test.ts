@@ -12,7 +12,7 @@ describe('/idol tests', () => {
   test('should check if idol details are returned properly (group)', async () => {
     const [idolPicLink, idolDescription] = await sendIdol('jin bts');
     const details =
-      '<u>Idol</u>\n\n<i>Jin (Kim SeokJin / 김석진)</i>\n\n<b>Group:</b> BTS\n<b>Label:</b> BIGHIT MUSIC\n<b>Nationality:</b> Korean\n<b>Birthdate:</b> Dec 04 1992\n<b>Blood Type:</b> O\n<b>Height:</b> 179 cm\n<b>Weight:</b> 63 kg\n<b>Position:</b> Vocal';
+      '<u>Idol</u>\n\n<i>Jin (Kim SeokJin / 김석진)</i>\n\n<b>Group:</b> BTS\n<b>Label:</b> BIGHIT MUSIC\n<b>Nationality:</b> Korean\n<b>Birthdate:</b> Dec 04 1992\n<b>Blood Type:</b> O\n<b>Height:</b> 179 cm\n<b>Weight:</b> 63 kg\n<b>MBTI:</b> INTP\n<b>Position:</b> Vocal';
 
     expect(idolDescription).toBe(details);
     expect(idolPicLink).toMatch(/https:\/\/image.kpopmap.com\/(.*).(jpg|png)/);

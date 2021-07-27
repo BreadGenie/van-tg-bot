@@ -23,7 +23,7 @@ export const sendGroup = async (command: string): Promise<result> => {
       const foundCSS = $('#content-wrap > style').html();
       const idolPicLink = foundCSS.match(/https(.*?)(jpg|png)/g);
       let groupDescription =
-        '<b>Group:</b> ' + $('.profile-top').text().trim() + '\n';
+        '<b>Group:</b> ' + $('.profile-top h2').text().trim() + '\n';
 
       if (
         $('p > .label').parent().prev().text() === '' ||

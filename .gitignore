@@ -5,3 +5,5 @@ npm-debug.log
 keys.txt
 groups.json
 idols.json
+dist
+built

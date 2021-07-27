@@ -6,7 +6,15 @@
   "scripts": {
     "test": "jest",
     "lint": "eslint . --ext .ts",
-    "nodemon": "nodemon src/bot.ts --ignore idols.json --ignore groups.json"
+    "build-ts": "tsc",
+    "postinstall": "npm run build-ts",
+    "start": "npm run serve",
+    "serve": "node built/bot.js",
+    "watch-node": "nodemon built/bot.js",
+    "watch-ts": "tsc -w"
+  },
+  "engines": {
+    "node": "14.15.1"
   },
   "author": "Bread Genie",
   "license": "GPL-3.0",

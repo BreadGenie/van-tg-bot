@@ -4,7 +4,7 @@ import { readFileSync } from 'fs';
 import { SEND_ID, NO_ID } from '../helpers/strings';
 import { Idol, result } from '../types';
 
-const scrapeIdol = async (foundIdol) => {
+const scrapeIdol = async (foundIdol: Idol[]) => {
   const result = await fetch(foundIdol[0].idolLink);
   const body = await result.text();
 
@@ -17,7 +17,7 @@ const scrapeIdol = async (foundIdol) => {
 
   if ($('.profile-top .group').text() !== '') {
     idolDescription +=
-      '<b>Group:</b> ' + $('.profile-top .group').text() + '\n';
+      '<b>Group:</b> ' + $('.profile-top span').first().text() + '\n';
   }
 
   const idolDesc = [];

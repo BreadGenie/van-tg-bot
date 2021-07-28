@@ -58,13 +58,13 @@ const getMultipleIdols = async (
 export const inline = async (
   bot: TelegramBot,
   query: { query: string; id: string }
-): Promise<number | void> => {
+): Promise<void> => {
   const command = query.query.trim().toLowerCase();
   const groupResult: result = await sendGroup(command);
   const idolResult: result = await sendIdol(command);
 
   if (groupResult === SEND_GP && idolResult === SEND_ID) {
-    return 0;
+    return;
   } else if (groupResult !== NO_GP) {
     const groupPicLink = groupResult[0];
     let groupDescription = groupResult[1];

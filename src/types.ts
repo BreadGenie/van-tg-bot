@@ -10,3 +10,14 @@ export interface Group {
   groupName: string;
   groupLink: string;
 }
+
+export interface MatchString {
+  diceCoeff: number;
+  matchString: string;
+  index: number;
+}
+
+export interface MatchStringArray {
+  matchedStrings: MatchString[];
+  bestMatch: MatchString[];
+}

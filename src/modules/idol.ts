@@ -3,9 +3,10 @@ import fetch from 'node-fetch';
 import { readFileSync } from 'fs';
 import { SEND_ID, NO_ID } from '../helpers/strings';
 import { Idol, result } from '../types';
+import { matchStringArray } from '../helpers/dice';
 
-const scrapeIdol = async (foundIdol: Idol[]) => {
-  const result = await fetch(foundIdol[0].idolLink);
+const scrapeIdol = async (foundIdol: Idol) => {
+  const result = await fetch(foundIdol.idolLink);
   const body = await result.text();
 
   const $ = cheerio.load(body);
@@ -53,64 +54,24 @@ const scrapeIdol = async (foundIdol: Idol[]) => {
   return [idolPicLink[0], idolDescription];
 };
 
-export const sendIdol = async (command: string): Promise<result> => {
-  let findIdol = '';
-  let findIdolGroup = '';
-  if (command === '') {
+export const sendIdol = async (findIdol: string): Promise<result> => {
+  if (findIdol === '') {
     return SEND_ID;
   } else {
-    if (command.includes('"')) {
-      findIdol = command.match(/(?<=")(.*?)(?=")/g)[0];
-      if (command.includes('" ')) {
-        findIdolGroup = command.replace(`"${findIdol}" `, '').toLowerCase();
-        findIdol = findIdol.toLowerCase();
-      } else {
-        findIdol = findIdol.toLowerCase();
-        findIdolGroup = undefined;
-      }
-    } else {
-      if (command.includes(' ')) {
-        findIdol = command.split(' ')[0].toLowerCase();
-        findIdolGroup = command.split(' ')[1].toLowerCase();
-      } else {
-        findIdol = command.toLowerCase();
-        findIdolGroup = undefined;
-      }
-    }
-
     const rawdata = readFileSync('idols.json');
     const idols: Idol[] = JSON.parse(rawdata.toString());
 
-    if (findIdolGroup === undefined) {
-      const foundIdol = idols.filter((idol) => idol.idolName === findIdol);
-      if (foundIdol.length > 0) {
-        if (foundIdol.length === 1) {
-          return await scrapeIdol(foundIdol);
-        } else {
-          let foundIdols = 'Found Multiple Results:\n\n';
-          foundIdol.forEach((idol) => {
-            foundIdols +=
-              idol.idolName.charAt(0).toUpperCase() +
-              idol.idolName.slice(1) +
-              ' - ' +
-              idol.idolGroup.toUpperCase() +
-              '\n';
-          });
-          foundIdols += '\nUse /idol &lt;idol-name&gt; &lt;group-name&gt;';
-          return foundIdols;
-        }
-      } else {
-        return NO_ID;
-      }
+    const idolArray = idols.map(({ idolName }) => idolName);
+
+    const { bestMatch } = matchStringArray(findIdol.toLowerCase(), idolArray, {
+      maxBestMatch: 3,
+    });
+
+    if (bestMatch[0].diceCoeff > 0.4) {
+      const foundIdol = idols[bestMatch[0].index];
+      return await scrapeIdol(foundIdol);
     } else {
-      const foundIdol = idols.filter(
-        (idol) => idol.idolName === findIdol && idol.idolGroup === findIdolGroup
-      );
-      if (foundIdol.length > 0) {
-        return await scrapeIdol(foundIdol);
-      } else {
-        return NO_ID;
-      }
+      return NO_ID;
     }
   }
 };

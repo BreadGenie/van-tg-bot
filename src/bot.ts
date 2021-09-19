@@ -17,7 +17,7 @@ const token: string = process.env.TELEGRAM_TOKEN;
 const url: string = process.env.APP_URL;
 const port: string | undefined = process.env.PORT;
 
-const options: TelegramBot.WebHookOptions | any =
+const options: TelegramBot.WebHookOptions | unknown =
   port === undefined
     ? {
         polling: true,

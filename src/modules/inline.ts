@@ -1,5 +1,5 @@
 import { result } from '../types';
-import { sendGroup } from './group';
+import { searchGroup } from './group';
 import { sendIdol } from './idol';
 import { SEND_GP, SEND_ID, NO_GP, NO_ID } from '../helpers/strings';
 import TelegramBot = require('node-telegram-bot-api');
@@ -60,7 +60,7 @@ export const inline = async (
   query: { query: string; id: string }
 ): Promise<void> => {
   const command = query.query.trim().toLowerCase();
-  const groupResult: result = await sendGroup(command);
+  const groupResult: result = await searchGroup(command);
   const idolResult: result = await sendIdol(command);
 
   if (groupResult === SEND_GP && idolResult === SEND_ID) {

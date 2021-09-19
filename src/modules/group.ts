@@ -50,7 +50,7 @@ const scrapeGroup = async (foundGroup: Group) => {
   return [idolPicLink[0], groupDescription];
 };
 
-export const sendGroup = async (command: string): Promise<result> => {
+export const searchGroup = async (command: string): Promise<result> => {
   if (command === '') {
     return SEND_GP;
   } else {

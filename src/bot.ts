@@ -2,7 +2,7 @@ import TelegramBot = require('node-telegram-bot-api');
 import cron = require('node-cron');
 import * as dotenv from 'dotenv';
 import help from './modules/help';
-import { sendGroup } from './modules/group';
+import { searchGroup } from './modules/group';
 import { sendIdol } from './modules/idol';
 import { inline } from './modules/inline';
 import { sendReply } from './helpers/reply';
@@ -45,7 +45,7 @@ bot.on('inline_query', async (query) => {
 });
 
 bot.onText(/^\/group(@VanBT21_Bot)? ?(.*)/, async (msg, command) => {
-  const result: result = await sendGroup(command[2]);
+  const result: result = await searchGroup(command[2]);
   await sendReply(bot, msg, result);
 });
 

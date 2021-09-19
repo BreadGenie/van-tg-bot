@@ -54,7 +54,7 @@ const scrapeIdol = async (foundIdol: Idol) => {
   return [idolPicLink[0], idolDescription];
 };
 
-export const sendIdol = async (findIdol: string): Promise<result> => {
+export const searchIdol = async (findIdol: string): Promise<result> => {
   if (findIdol === '') {
     return SEND_ID;
   } else {

@@ -1,6 +1,6 @@
 import { result } from '../types';
 import { searchGroup } from './group';
-import { sendIdol } from './idol';
+import { searchIdol } from './idol';
 import { SEND_GP, SEND_ID, NO_GP, NO_ID } from '../helpers/strings';
 import TelegramBot = require('node-telegram-bot-api');
 
@@ -19,7 +19,7 @@ const getMultipleIdols = async (
   await asyncForEach(idolResult, async (result: string): Promise<void> => {
     await waitFor(50);
     const idolCommand = result.toLowerCase();
-    const idolResult = await sendIdol(idolCommand);
+    const idolResult = await searchIdol(idolCommand);
 
     if (typeof idolResult !== 'string') {
       const [idolPicLink] = idolResult;
@@ -61,7 +61,7 @@ export const inline = async (
 ): Promise<void> => {
   const command = query.query.trim().toLowerCase();
   const groupResult: result = await searchGroup(command);
-  const idolResult: result = await sendIdol(command);
+  const idolResult: result = await searchIdol(command);
 
   if (groupResult === SEND_GP && idolResult === SEND_ID) {
     return;

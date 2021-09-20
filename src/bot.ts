@@ -7,7 +7,7 @@ import { searchIdol } from './modules/idol';
 import { inline } from './modules/inline';
 import { sendReply } from './helpers/reply';
 import { scrapeNStore } from './helpers/scrapeAll';
-import { result } from './types';
+import { ScrapedGroup, ScrapedIdol } from './types';
 
 import { START_STRING } from './helpers/strings';
 
@@ -45,12 +45,12 @@ bot.on('inline_query', async (query) => {
 });
 
 bot.onText(/^\/group(@VanBT21_Bot)? ?(.*)/, async (msg, command) => {
-  const result: result = await searchGroup(command[2]);
+  const result: string | ScrapedGroup = await searchGroup(command[2]);
   await sendReply(bot, msg, result);
 });
 
 bot.onText(/^\/idol(@VanBT21_Bot)? ?(.*)/, async (msg, command) => {
-  const result: result = await searchIdol(command[2]);
+  const result: string | ScrapedIdol = await searchIdol(command[2]);
   await sendReply(bot, msg, result);
 });
 

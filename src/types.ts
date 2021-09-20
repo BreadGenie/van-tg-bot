@@ -1,5 +1,3 @@
-export type result = string | string[];
-
 export interface Idol {
   idolName: string;
   idolGroup: string;

@@ -6,7 +6,7 @@ export const prettifyReply = (result: ScrapedIdol | ScrapedGroup): string => {
   if (!('members' in result)) {
     const idolKeys = Object.keys(result);
 
-    for (let i = 1; i < idolKeys.length; i++) {
+    for (let i = 1; i < idolKeys.length - 1; i++) {
       if (i === 1)
         description += `<u>Idol</u>\n\n<i>${result[idolKeys[i]]}</i>\n\n`;
       else
@@ -17,8 +17,8 @@ export const prettifyReply = (result: ScrapedIdol | ScrapedGroup): string => {
   } else {
     const groupKeys = Object.keys(result);
 
-    for (let i = 1; i < groupKeys.length; i++) {
-      if (i !== groupKeys.length - 1)
+    for (let i = 1; i < groupKeys.length - 1; i++) {
+      if (i !== groupKeys.length - 2)
         description += `<b>${groupKeys[i].charAt(0).toUpperCase()}${groupKeys[
           i
         ].slice(1)}:</b> ${result[groupKeys[i]]}\n`;

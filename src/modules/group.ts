@@ -5,35 +5,45 @@ import { SEND_GP, NO_GP } from '../helpers/strings';
 import { Group, ScrapedGroup } from '../types';
 import { matchStringArray } from '../helpers/dice';
 
-const scrapeGroup = async (foundGroup: Group) => {
-  const groupResult = await fetch(foundGroup.groupLink);
-  const html = await groupResult.text();
+export const scrapeGroup = async (
+  foundGroup: Group[]
+): Promise<ScrapedGroup[]> => {
+  const scrapedGroups: ScrapedGroup[] = [];
 
-  const $ = cheerio.load(html);
-  const foundCSS = $('#content-wrap > style').html();
-  const picLink = foundCSS.match(/https(.*?)(jpg|png)/g)[0];
+  for (let i = 0; i < foundGroup.length; i++) {
+    const groupResult = await fetch(foundGroup[i].groupLink);
+    const html = await groupResult.text();
 
-  const scrapedGroup: ScrapedGroup = {
-    picLink,
-    group: $('.profile-top h2').text().trim(),
-  };
+    const $ = cheerio.load(html);
+    const foundCSS = $('#content-wrap > style').html();
+    const picLink = foundCSS.match(/https(.*?)(jpg|png)/g)[0];
 
-  scrapedGroup[`${$('p > .label').parent().prev().text()}`] =
-    $('p > .label').text();
+    const scrapedGroup: ScrapedGroup = {
+      picLink,
+      name: $('.profile-top h2').text().trim(),
+    };
 
-  $('.half p').each((i, el) => {
-    scrapedGroup[`${$(el).prev().text()}`] = $(el).text();
-  });
+    scrapedGroup[`${$('p > .label').parent().prev().text()}`] =
+      $('p > .label').text();
 
-  const members: string[] = [];
+    $('.half p').each((i, el) => {
+      scrapedGroup[`${$(el).prev().text()}`] = $(el).text();
+    });
 
-  $('.name a').each((i, el) => {
-    members.push($(el).text());
-  });
+    const members: string[] = [];
 
-  scrapedGroup['members'] = members;
+    $('.name a').each((i, el) => {
+      members.push($(el).text());
+    });
 
-  return scrapedGroup;
+    scrapedGroup['members'] = members;
+
+    scrapedGroup['diceCoeff'] = foundGroup[i]['diceCoeff'];
+
+    scrapedGroups.push(scrapedGroup);
+  }
+
+  return scrapedGroups;
 };
 
 export const searchGroup = async (
@@ -55,7 +65,8 @@ export const searchGroup = async (
 
     if (bestMatch[0].diceCoeff > 0.4) {
       const foundGroup = groups[bestMatch[0].index];
-      return await scrapeGroup(foundGroup);
+      const groupResult = await scrapeGroup([foundGroup]);
+      return groupResult[0];
     } else {
       return NO_GP;
     }

@@ -4,11 +4,13 @@ export interface Idol {
   idolName: string;
   idolGroup: string;
   idolLink: string;
+  diceCoeff?: number;
 }
 
 export interface Group {
   groupName: string;
   groupLink: string;
+  diceCoeff?: number;
 }
 
 export interface ScrapedIdol {
@@ -21,14 +23,16 @@ export interface ScrapedIdol {
   height?: string;
   weight?: string;
   position?: string;
+  diceCoeff?: number;
 }
 
 export interface ScrapedGroup {
   picLink: string;
-  group?: string;
+  name?: string;
   label?: string;
   debut?: string;
   members?: string[];
+  diceCoeff?: number;
 }
 
 export interface MatchString {

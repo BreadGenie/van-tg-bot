@@ -35,6 +35,8 @@ export const scrapeIdol = async (
       scrapedIdol[$(el).prev().text().toLowerCase()] = $(el).text();
     });
 
+    scrapedIdol['diceCoeff'] = foundIdols[i]['diceCoeff'];
+
     scrapedIdols.push(scrapedIdol);
   }
 

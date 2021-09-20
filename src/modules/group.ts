@@ -2,7 +2,7 @@ import cheerio from 'cheerio';
 import fetch from 'node-fetch';
 import { readFileSync } from 'fs';
 import { SEND_GP, NO_GP } from '../helpers/strings';
-import { Group, result } from '../types';
+import { Group, ScrapedGroup } from '../types';
 import { matchStringArray } from '../helpers/dice';
 
 const scrapeGroup = async (foundGroup: Group) => {
@@ -11,46 +11,34 @@ const scrapeGroup = async (foundGroup: Group) => {
 
   const $ = cheerio.load(html);
   const foundCSS = $('#content-wrap > style').html();
-  const idolPicLink = foundCSS.match(/https(.*?)(jpg|png)/g);
-  let groupDescription =
-    '<b>Group:</b> ' + $('.profile-top h2').text().trim() + '\n';
+  const picLink = foundCSS.match(/https(.*?)(jpg|png)/g)[0];
 
-  if (
-    $('p > .label').parent().prev().text() === '' ||
-    $('p > .label').parent().prev().text() === ' '
-  ) {
-    groupDescription += '\n' + $('.desc p').text() + '\n';
-  } else {
-    groupDescription +=
-      '<b>' +
-      $('p > .label').parent().prev().text() +
-      ':</b> ' +
-      $('p > .label').text() +
-      '\n';
-  }
+  const scrapedGroup: ScrapedGroup = {
+    picLink,
+    group: $('.profile-top h2').text().trim(),
+  };
 
-  const groupDebNFan: string[] = [];
+  scrapedGroup[`${$('p > .label').parent().prev().text()}`] =
+    $('p > .label').text();
 
   $('.half p').each((i, el) => {
-    groupDebNFan.push($(el).prev().text());
-    groupDebNFan.push($(el).text());
+    scrapedGroup[`${$(el).prev().text()}`] = $(el).text();
   });
 
-  for (let i = 0; i < groupDebNFan.length; i += 2) {
-    groupDescription +=
-      '<b>' + groupDebNFan[i] + ':</b> ' + groupDebNFan[i + 1] + '\n';
-  }
-
-  groupDescription += '<b>Members:</b>\n';
+  const members: string[] = [];
 
   $('.name a').each((i, el) => {
-    groupDescription += ' <code>' + $(el).text() + '</code>\n';
+    members.push($(el).text());
   });
 
-  return [idolPicLink[0], groupDescription];
+  scrapedGroup['members'] = members;
+
+  return scrapedGroup;
 };
 
-export const searchGroup = async (command: string): Promise<result> => {
+export const searchGroup = async (
+  command: string
+): Promise<string | ScrapedGroup> => {
   if (command === '') {
     return SEND_GP;
   } else {

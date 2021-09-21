@@ -23,11 +23,11 @@ export const scrapeGroup = async (
       name: $('.profile-top h2').text().trim(),
     };
 
-    scrapedGroup[`${$('p > .label').parent().prev().text()}`] =
+    scrapedGroup[`${$('p > .label').parent().prev().text().toLowerCase()}`] =
       $('p > .label').text();
 
     $('.half p').each((i, el) => {
-      scrapedGroup[`${$(el).prev().text()}`] = $(el).text();
+      scrapedGroup[`${$(el).prev().text().toLowerCase()}`] = $(el).text();
     });
 
     const members: string[] = [];

@@ -39,16 +39,16 @@ describe('/idol tests', () => {
     expect(output).toBe(SEND_ID);
   });
 
-  // test('should output multiple idol names when there are multiple entries in the site', async () => {
-  //   const output = await searchIdol('jin');
-  //   const final =
-  //     'Found Multiple Results:\n\nJin - GIDONGDAE\nJin - BTS\nJin - LOVELYZ\n\nUse /idol &lt;idol-name&gt; &lt;group-name&gt;';
+  test('should output multiple idol names when there are multiple entries in the site', async () => {
+    const output = await searchIdol('jin');
+    const final =
+      'Found Multiple Results:\n\nJin - LOVELYZ\nJin - MVP\nJin -  \nJin - BTS\n\nUse /idol &lt;idol-name&gt; &lt;group-name&gt;';
 
-  //   expect(output).toBe(final);
-  // });
+    expect(output).toBe(final);
+  });
 
   test('should output idol not found if no idol found in the site', async () => {
-    const output = await searchIdol('Bread Genie');
+    const output = await searchIdol('BreadGenie');
 
     expect(output).toBe(NO_ID);
   });

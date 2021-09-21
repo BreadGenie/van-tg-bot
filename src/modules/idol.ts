@@ -52,15 +52,37 @@ export const searchIdol = async (
     const rawdata = readFileSync('idols.json');
     const idols: Idol[] = JSON.parse(rawdata.toString());
 
-    const idolArray = findIdol.includes('')
-      ? idols.map(({ idolName, idolGroup }) => `${idolName} ${idolGroup}`)
-      : idols.map(({ idolName }) => idolName);
+    const idolArray = findIdol.includes(' ')
+      ? idols.map(({ idolName, idolGroup }) =>
+          `${idolName} ${idolGroup}`.trim()
+        )
+      : idols.map(({ idolName }) => idolName.trim());
 
     const { bestMatch } = matchStringArray(findIdol.toLowerCase(), idolArray, {
-      maxBestMatch: 3,
+      maxBestMatch: 4,
     });
 
-    if (bestMatch[0].diceCoeff > 0.4) {
+    const i = 0;
+    if (bestMatch[i].diceCoeff !== bestMatch[i + 1].diceCoeff) {
+      bestMatch.splice(i + 1, 1);
+      if (bestMatch[i].diceCoeff !== bestMatch[i + 1].diceCoeff) {
+        bestMatch.splice(i + 1, 1);
+      }
+    }
+
+    if (bestMatch[0].diceCoeff > 0.5) {
+      if (bestMatch.length !== 1) {
+        let multGrpMsg = 'Found Multiple Results:\n\n';
+        bestMatch.forEach((match) => {
+          multGrpMsg += `${idols[match.index].idolName
+            .charAt(0)
+            .toUpperCase()}${idols[match.index].idolName.slice(1)} - ${idols[
+            match.index
+          ].idolGroup.toUpperCase()}\n`;
+        });
+        return `${multGrpMsg}\nUse /idol &lt;idol-name&gt; &lt;group-name&gt;`;
+      }
+
       const foundIdol = idols[bestMatch[0].index];
       const idolResult = await scrapeIdol([foundIdol]);
       return idolResult[0];

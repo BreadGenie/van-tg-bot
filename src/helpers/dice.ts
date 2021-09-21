@@ -15,7 +15,7 @@ const intersect = (set1, set2) => {
 const matchStrings = (
   mainString: string,
   matchString: string,
-  index: number
+  index = 0
 ): MatchString => {
   if (mainString.length === 1) {
     if (mainString === matchString) {
@@ -50,7 +50,10 @@ const matchStringArray = (
 ): MatchStringArray => {
   const matchedStrings = arr.map((s, i) => matchStrings(str, s, i));
   const bestMatch: MatchString[] = [];
-  const tempMatchedStrings = matchedStrings;
+
+  // spreading done to avoid matchedStrings to be changed while splicing
+  const tempMatchedStrings = [...matchedStrings];
+
   for (let i = 0; i < options.maxBestMatch; i++) {
     bestMatch.push(
       tempMatchedStrings.reduce((max, obj) => {

@@ -52,7 +52,9 @@ export const searchIdol = async (
     const rawdata = readFileSync('idols.json');
     const idols: Idol[] = JSON.parse(rawdata.toString());
 
-    const idolArray = idols.map(({ idolName }) => idolName);
+    const idolArray = findIdol.includes('')
+      ? idols.map(({ idolName, idolGroup }) => `${idolName} ${idolGroup}`)
+      : idols.map(({ idolName }) => idolName);
 
     const { bestMatch } = matchStringArray(findIdol.toLowerCase(), idolArray, {
       maxBestMatch: 3,

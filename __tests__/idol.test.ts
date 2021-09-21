@@ -9,16 +9,17 @@ describe('/idol tests', () => {
     return await scrapeIdolList();
   });
 
-  // test('should check if idol details are returned properly (group)', async () => {
-  //   const { picLink, name, group, label } = await searchIdol('jin bts');
-  //   const details =
-  //     '<u>Idol</u>\n\n<i></i>\n\n<b>Group:</b> \n<b>Label:</b> \n<b>Nationality:</b> Korean\n<b>Birthdate:</b> Dec 04 1992\n<b>Blood Type:</b> O\n<b>Height:</b> 179 cm\n<b>Weight:</b> 63 kg\n<b>MBTI:</b> INTP (Logician)\n<b>Position:</b> Vocal';
+  test('should check if idol details are returned properly (group)', async () => {
+    const result = await searchIdol('jin bts');
+    if (typeof result !== 'string') {
+      const { picLink, name, group, label } = result;
 
-  // expect(picLink).toMatch(/https:\/\/image.kpopmap.com\/(.*).(jpg|png)/);
-  // expect(name).toBe('Jin (Kim SeokJin / 김석진)');
-  // expect(group).toBe('BTS');
-  // expect(label).toBe('BIGHIT MUSIC');
-  // });
+      expect(picLink).toMatch(/https:\/\/image.kpopmap.com\/(.*).(jpg|png)/);
+      expect(name).toBe('Jin (Kim SeokJin / 김석진)');
+      expect(group).toBe('BTS');
+      expect(label).toBe('BIGHIT MUSIC');
+    }
+  });
 
   test('should check if idol details are returned properly (solo)', async () => {
     const result = await searchIdol('IU');

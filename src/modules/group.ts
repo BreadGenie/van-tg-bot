@@ -59,9 +59,7 @@ export const searchGroup = async (
 
     const groupArray = groups.map(({ groupName }) => groupName);
 
-    const { bestMatch } = matchStringArray(findGroup, groupArray, {
-      maxBestMatch: 3,
-    });
+    const { bestMatch } = matchStringArray(findGroup, groupArray);
 
     if (bestMatch[0].diceCoeff > 0.4) {
       const foundGroup = groups[bestMatch[0].index];

@@ -71,7 +71,7 @@ export const searchIdol = async (
     }
 
     if (bestMatch[0].diceCoeff > 0.5) {
-      if (bestMatch.length !== 1) {
+      if (bestMatch.length !== 1 && !findIdol.includes(' ')) {
         let multGrpMsg = 'Found Multiple Results:\n\n';
         bestMatch.forEach((match) => {
           multGrpMsg += `${idols[match.index].idolName

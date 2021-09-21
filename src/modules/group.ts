@@ -2,9 +2,53 @@ import cheerio from 'cheerio';
 import fetch from 'node-fetch';
 import { readFileSync } from 'fs';
 import { SEND_GP, NO_GP } from '../helpers/strings';
-import { Group, result } from '../types';
+import { Group, ScrapedGroup } from '../types';
+import { matchStringArray } from '../helpers/dice';
 
-export const sendGroup = async (command: string): Promise<result> => {
+export const scrapeGroup = async (
+  foundGroup: Group[]
+): Promise<ScrapedGroup[]> => {
+  const scrapedGroups: ScrapedGroup[] = [];
+
+  for (let i = 0; i < foundGroup.length; i++) {
+    const groupResult = await fetch(foundGroup[i].groupLink);
+    const html = await groupResult.text();
+
+    const $ = cheerio.load(html);
+    const foundCSS = $('#content-wrap > style').html();
+    const picLink = foundCSS.match(/https(.*?)(jpg|png)/g)[0];
+
+    const scrapedGroup: ScrapedGroup = {
+      picLink,
+      name: $('.profile-top h2').text().trim(),
+    };
+
+    scrapedGroup[`${$('p > .label').parent().prev().text().toLowerCase()}`] =
+      $('p > .label').text();
+
+    $('.half p').each((i, el) => {
+      scrapedGroup[`${$(el).prev().text().toLowerCase()}`] = $(el).text();
+    });
+
+    const members: string[] = [];
+
+    $('.name a').each((i, el) => {
+      members.push($(el).text());
+    });
+
+    scrapedGroup['members'] = members;
+
+    scrapedGroup['diceCoeff'] = foundGroup[i]['diceCoeff'];
+
+    scrapedGroups.push(scrapedGroup);
+  }
+
+  return scrapedGroups;
+};
+
+export const searchGroup = async (
+  command: string
+): Promise<string | ScrapedGroup> => {
   if (command === '') {
     return SEND_GP;
   } else {
@@ -13,51 +57,14 @@ export const sendGroup = async (command: string): Promise<result> => {
     const rawdata: Buffer = readFileSync('groups.json');
     const groups: Group[] = JSON.parse(rawdata.toString());
 
-    const foundGroup = groups.find((group) => group.groupName === findGroup);
+    const groupArray = groups.map(({ groupName }) => groupName);
 
-    if (foundGroup) {
-      const groupResult = await fetch(foundGroup.groupLink);
-      const html = await groupResult.text();
+    const { bestMatch } = matchStringArray(findGroup, groupArray);
 
-      const $ = cheerio.load(html);
-      const foundCSS = $('#content-wrap > style').html();
-      const idolPicLink = foundCSS.match(/https(.*?)(jpg|png)/g);
-      let groupDescription =
-        '<b>Group:</b> ' + $('.profile-top h2').text().trim() + '\n';
-
-      if (
-        $('p > .label').parent().prev().text() === '' ||
-        $('p > .label').parent().prev().text() === ' '
-      ) {
-        groupDescription += '\n' + $('.desc p').text() + '\n';
-      } else {
-        groupDescription +=
-          '<b>' +
-          $('p > .label').parent().prev().text() +
-          ':</b> ' +
-          $('p > .label').text() +
-          '\n';
-      }
-
-      const groupDebNFan: string[] = [];
-
-      $('.half p').each((i, el) => {
-        groupDebNFan.push($(el).prev().text());
-        groupDebNFan.push($(el).text());
-      });
-
-      for (let i = 0; i < groupDebNFan.length; i += 2) {
-        groupDescription +=
-          '<b>' + groupDebNFan[i] + ':</b> ' + groupDebNFan[i + 1] + '\n';
-      }
-
-      groupDescription += '<b>Members:</b>\n';
-
-      $('.name a').each((i, el) => {
-        groupDescription += ' <code>' + $(el).text() + '</code>\n';
-      });
-
-      return [idolPicLink[0], groupDescription];
+    if (bestMatch[0].diceCoeff > 0.4) {
+      const foundGroup = groups[bestMatch[0].index];
+      const groupResult = await scrapeGroup([foundGroup]);
+      return groupResult[0];
     } else {
       return NO_GP;
     }

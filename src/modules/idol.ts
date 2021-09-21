@@ -2,115 +2,92 @@ import cheerio from 'cheerio';
 import fetch from 'node-fetch';
 import { readFileSync } from 'fs';
 import { SEND_ID, NO_ID } from '../helpers/strings';
-import { Idol, result } from '../types';
+import { Idol, ScrapedIdol } from '../types';
+import { matchStringArray } from '../helpers/dice';
 
-const scrapeIdol = async (foundIdol: Idol[]) => {
-  const result = await fetch(foundIdol[0].idolLink);
-  const body = await result.text();
+export const scrapeIdol = async (
+  foundIdols: Idol[]
+): Promise<ScrapedIdol[]> => {
+  const scrapedIdols: ScrapedIdol[] = [];
 
-  const $ = cheerio.load(body);
+  for (let i = 0; i < foundIdols.length; i++) {
+    const result = await fetch(foundIdols[i].idolLink);
+    const body = await result.text();
 
-  const foundCSS = $('#content-wrap > style').html();
-  const idolPicLink = foundCSS.match(/https(.*?)(jpg|png)/g);
-  let idolDescription =
-    '<u>Idol</u>\n\n<i>' + $('.profile-top > h2').text() + '</i>\n\n';
+    const $ = cheerio.load(body);
 
-  if ($('.profile-top .group').text() !== '') {
-    idolDescription +=
-      '<b>Group:</b> ' + $('.profile-top span').first().text() + '\n';
+    const foundCSS = $('#content-wrap > style').html();
+    const picLink = foundCSS.match(/https(.*?)(jpg|png)/g)[0];
+
+    const scrapedIdol: ScrapedIdol = {
+      picLink,
+      name: $('.profile-top > h2').text(),
+    };
+
+    if ($('.profile-top .group').text() !== '')
+      scrapedIdol.group = $('.profile-top span').first().text();
+
+    $('.half p').each((i, el) => {
+      scrapedIdol[$(el).prev().text().toLowerCase()] = $(el).text();
+    });
+
+    $('.full p').each((i, el) => {
+      scrapedIdol[$(el).prev().text().toLowerCase()] = $(el).text();
+    });
+
+    scrapedIdol['diceCoeff'] = foundIdols[i]['diceCoeff'];
+
+    scrapedIdols.push(scrapedIdol);
   }
 
-  const idolDesc = [];
-
-  $('.half p').each((i, el) => {
-    idolDesc.push($(el).prev().text());
-    idolDesc.push($(el).text());
-  });
-
-  for (let i = 0; i < idolDesc.length; i += 2) {
-    idolDescription += '<b>' + idolDesc[i] + ':</b> ' + idolDesc[i + 1] + '\n';
-  }
-
-  $('.full p').each((i, el) => {
-    idolDesc.push($(el).prev().text());
-    idolDesc.push($(el).text());
-  });
-
-  if (idolDesc[idolDesc.length - 2] === 'SNS') {
-    idolDescription +=
-      '<b>' +
-      idolDesc[idolDesc.length - 4] +
-      ':</b> ' +
-      idolDesc[idolDesc.length - 3];
-  } else {
-    idolDescription +=
-      '<b>' +
-      idolDesc[idolDesc.length - 2] +
-      ':</b> ' +
-      idolDesc[idolDesc.length - 1];
-  }
-
-  return [idolPicLink[0], idolDescription];
+  return scrapedIdols;
 };
 
-export const sendIdol = async (command: string): Promise<result> => {
-  let findIdol = '';
-  let findIdolGroup = '';
-  if (command === '') {
+export const searchIdol = async (
+  findIdol: string
+): Promise<string | ScrapedIdol> => {
+  if (findIdol === '') {
     return SEND_ID;
   } else {
-    if (command.includes('"')) {
-      findIdol = command.match(/(?<=")(.*?)(?=")/g)[0];
-      if (command.includes('" ')) {
-        findIdolGroup = command.replace(`"${findIdol}" `, '').toLowerCase();
-        findIdol = findIdol.toLowerCase();
-      } else {
-        findIdol = findIdol.toLowerCase();
-        findIdolGroup = undefined;
-      }
-    } else {
-      if (command.includes(' ')) {
-        findIdol = command.split(' ')[0].toLowerCase();
-        findIdolGroup = command.split(' ')[1].toLowerCase();
-      } else {
-        findIdol = command.toLowerCase();
-        findIdolGroup = undefined;
-      }
-    }
-
     const rawdata = readFileSync('idols.json');
     const idols: Idol[] = JSON.parse(rawdata.toString());
 
-    if (findIdolGroup === undefined) {
-      const foundIdol = idols.filter((idol) => idol.idolName === findIdol);
-      if (foundIdol.length > 0) {
-        if (foundIdol.length === 1) {
-          return await scrapeIdol(foundIdol);
-        } else {
-          let foundIdols = 'Found Multiple Results:\n\n';
-          foundIdol.forEach((idol) => {
-            foundIdols +=
-              idol.idolName.charAt(0).toUpperCase() +
-              idol.idolName.slice(1) +
-              ' - ' +
-              idol.idolGroup.toUpperCase() +
-              '\n';
-          });
-          foundIdols += '\nUse /idol &lt;idol-name&gt; &lt;group-name&gt;';
-          return foundIdols;
-        }
-      } else {
-        return NO_ID;
+    const idolArray = findIdol.includes(' ')
+      ? idols.map(({ idolName, idolGroup }) =>
+          `${idolName} ${idolGroup}`.trim()
+        )
+      : idols.map(({ idolName }) => idolName.trim());
+
+    const { bestMatch } = matchStringArray(findIdol.toLowerCase(), idolArray, {
+      maxBestMatch: 4,
+    });
+
+    const i = 0;
+    if (bestMatch[i].diceCoeff !== bestMatch[i + 1].diceCoeff) {
+      bestMatch.splice(i + 1, 1);
+      if (bestMatch[i].diceCoeff !== bestMatch[i + 1].diceCoeff) {
+        bestMatch.splice(i + 1, 1);
       }
+    }
+
+    if (bestMatch[0].diceCoeff > 0.5) {
+      if (bestMatch.length !== 1) {
+        let multGrpMsg = 'Found Multiple Results:\n\n';
+        bestMatch.forEach((match) => {
+          multGrpMsg += `${idols[match.index].idolName
+            .charAt(0)
+            .toUpperCase()}${idols[match.index].idolName.slice(1)} - ${idols[
+            match.index
+          ].idolGroup.toUpperCase()}\n`;
+        });
+        return `${multGrpMsg}\nUse /idol &lt;idol-name&gt; &lt;group-name&gt;`;
+      }
+
+      const foundIdol = idols[bestMatch[0].index];
+      const idolResult = await scrapeIdol([foundIdol]);
+      return idolResult[0];
     } else {
-      const foundIdol = idols.filter(
-        (idol) => idol.idolName === findIdol && idol.idolGroup === findIdolGroup
-      );
-      if (foundIdol.length > 0) {
-        return await scrapeIdol(foundIdol);
-      } else {
-        return NO_ID;
-      }
+      return NO_ID;
     }
   }
 };

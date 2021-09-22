@@ -4,15 +4,30 @@ import { ScrapedGroup, ScrapedIdol } from '../types';
 export const prettifyReply = (result: ScrapedIdol | ScrapedGroup): string => {
   let description = ``;
   if (!('members' in result)) {
-    const idolKeys = Object.keys(result);
+    let idolKeys = Object.keys(result);
 
-    for (let i = 1; i < idolKeys.length - 1; i++) {
+    for (let i = 1; i < idolKeys.length - 2; i++) {
+      if (!result[`${idolKeys[i]}`].trim()) delete result[`${idolKeys[i]}`];
+    }
+
+    idolKeys = Object.keys(result);
+
+    for (let i = 1; i < idolKeys.length - 2; i++) {
       if (i === 1)
         description += `<u>Idol</u>\n\n<i>${result[idolKeys[i]]}</i>\n\n`;
       else
         description += `<b>${idolKeys[i].charAt(0).toUpperCase()}${idolKeys[
           i
         ].slice(1)}:</b> ${result[idolKeys[i]]}\n`;
+    }
+    if ('sns' in result) {
+      description += `<b>${idolKeys[idolKeys.length - 2].toUpperCase()}:</b>\n`;
+      const snsKeys = Object.keys(result['sns']);
+      for (let i = 0; i < snsKeys.length; i++) {
+        description += `<a href='${result['sns'][`${snsKeys[i]}`]}'>${
+          snsKeys[i]
+        }</a>\n`;
+      }
     }
   } else {
     const groupKeys = Object.keys(result);

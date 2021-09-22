@@ -35,6 +35,14 @@ export const scrapeIdol = async (
       scrapedIdol[$(el).prev().text().toLowerCase()] = $(el).text();
     });
 
+    if ('sns' in scrapedIdol) {
+      const sns = {};
+      $('.item.sns a').each((i, el) => {
+        sns[$(el).attr('class')] = $(el).attr('href');
+      });
+      scrapedIdol['sns'] = sns;
+    }
+
     scrapedIdol['diceCoeff'] = foundIdols[i]['diceCoeff'];
 
     scrapedIdols.push(scrapedIdol);

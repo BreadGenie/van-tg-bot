@@ -83,9 +83,11 @@ export const searchIdol = async (
         bestMatch.forEach((match) => {
           multGrpMsg += `${idols[match.index].idolName
             .charAt(0)
-            .toUpperCase()}${idols[match.index].idolName.slice(1)} - ${idols[
-            match.index
-          ].idolGroup.toUpperCase()}\n`;
+            .toUpperCase()}${idols[match.index].idolName.slice(1)}`;
+
+          if (idols[match.index].idolGroup.trim())
+            multGrpMsg += ` - ${idols[match.index].idolGroup.toUpperCase()}\n`;
+          else multGrpMsg += `\n`;
         });
         return `${multGrpMsg}\nUse /idol &lt;idol-name&gt; &lt;group-name&gt;`;
       }

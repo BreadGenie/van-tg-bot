@@ -70,11 +70,10 @@ export const searchIdol = async (
       maxBestMatch: 4,
     });
 
-    const i = 0;
-    if (bestMatch[i].diceCoeff !== bestMatch[i + 1].diceCoeff) {
-      bestMatch.splice(i + 1, 1);
+    for (let i = 0; i < bestMatch.length - 1; i++) {
       if (bestMatch[i].diceCoeff !== bestMatch[i + 1].diceCoeff) {
         bestMatch.splice(i + 1, 1);
+        i--;
       }
     }
 

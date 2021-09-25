@@ -1,12 +1,11 @@
 import { searchGroup } from '../src/modules/group';
 import { SEND_GP, NO_GP } from '../src/helpers/strings';
 import { scrapeGroupList } from '../src/helpers/scrapeAll';
-import { join } from 'path';
-import { unlink } from 'fs';
+import { existsSync } from 'fs';
 
 describe('/group tests', () => {
   beforeAll(async () => {
-    return await scrapeGroupList();
+    if (!existsSync('groups.json')) return await scrapeGroupList();
   });
 
   test('should check if group details are returned properly', async () => {
@@ -39,13 +38,5 @@ describe('/group tests', () => {
     const output = await searchGroup('RM');
 
     expect(output).toBe(NO_GP);
-  });
-
-  afterAll(() => {
-    return unlink(join(__dirname + '/../groups.json'), (err) => {
-      if (err) {
-        // console.log(err);
-      }
-    });
   });
 });

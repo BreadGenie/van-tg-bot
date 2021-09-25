@@ -1,12 +1,11 @@
 import { searchIdol } from '../src/modules/idol';
 import { scrapeIdolList } from '../src/helpers/scrapeAll';
 import { SEND_ID, NO_ID } from '../src/helpers/strings';
-import { join } from 'path';
-import { unlink } from 'fs';
+import { existsSync } from 'fs';
 
 describe('/idol tests', () => {
   beforeAll(async () => {
-    return await scrapeIdolList();
+    if (!existsSync('idols.json')) return await scrapeIdolList();
   });
 
   test('should check if idol details are returned properly (group)', async () => {
@@ -51,13 +50,5 @@ describe('/idol tests', () => {
     const output = await searchIdol('BreadGenie');
 
     expect(output).toBe(NO_ID);
-  });
-
-  afterAll(() => {
-    return unlink(join(__dirname + '/../idols.json'), (err) => {
-      if (err) {
-        // console.log(err);
-      }
-    });
   });
 });

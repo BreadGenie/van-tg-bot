@@ -14,6 +14,7 @@ export interface Group {
 export interface ScrapedIdol {
   picLink: string;
   name?: string;
+  description?: string;
   group?: string;
   label?: string;
   nationality?: string;

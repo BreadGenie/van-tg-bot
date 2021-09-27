@@ -27,6 +27,11 @@ export const scrapeIdol = async (
     if ($('.profile-top .group').text() !== '')
       scrapedIdol.group = $('.profile-top span').first().text();
 
+    if ($('.full.desc p')) {
+      scrapedIdol.description = $('.full.desc p').text();
+      $('.full.desc').remove();
+    }
+
     $('.half p').each((i, el) => {
       scrapedIdol[$(el).prev().text().toLowerCase()] = $(el).text();
     });

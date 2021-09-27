@@ -15,10 +15,11 @@ export const prettifyReply = (result: ScrapedIdol | ScrapedGroup): string => {
     for (let i = 1; i < idolKeys.length - 2; i++) {
       if (i === 1)
         description += `<u>Idol</u>\n\n<i>${result[idolKeys[i]]}</i>\n\n`;
-      else
+      else if (idolKeys[i] !== 'description')
         description += `<b>${idolKeys[i].charAt(0).toUpperCase()}${idolKeys[
           i
         ].slice(1)}:</b> ${result[idolKeys[i]]}\n`;
+      else description += `\n${result[idolKeys[i]]}\n\n`;
     }
     if ('sns' in result) {
       description += `<b>${idolKeys[idolKeys.length - 2].toUpperCase()}:</b>\n`;

@@ -25,7 +25,7 @@ export const scrapeIdol = async (
     };
 
     if ($('.profile-top .group').text() !== '')
-      scrapedIdol.group = $('.profile-top span').first().text();
+      scrapedIdol['Group'] = $('.profile-top span').first().text();
 
     if ($('.full.desc p')) {
       scrapedIdol.description = $('.full.desc p').text();
@@ -33,11 +33,11 @@ export const scrapeIdol = async (
     }
 
     $('.half p').each((i, el) => {
-      scrapedIdol[$(el).prev().text().toLowerCase()] = $(el).text();
+      scrapedIdol[$(el).prev().text()] = $(el).text();
     });
 
     $('.full p').each((i, el) => {
-      scrapedIdol[$(el).prev().text().toLowerCase()] = $(el).text();
+      scrapedIdol[$(el).prev().text()] = $(el).text();
     });
 
     if ('sns' in scrapedIdol) {

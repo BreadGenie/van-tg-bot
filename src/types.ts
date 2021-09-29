@@ -15,22 +15,22 @@ export interface ScrapedIdol {
   picLink: string;
   name?: string;
   description?: string;
-  group?: string;
-  label?: string;
-  nationality?: string;
-  birthdate?: string;
-  height?: string;
-  weight?: string;
-  position?: string;
+  Group?: string;
+  Label?: string;
+  Nationality?: string;
+  Birthdate?: string;
+  Height?: string;
+  Weight?: string;
+  Position?: string;
   diceCoeff?: number;
 }
 
 export interface ScrapedGroup {
   picLink: string;
-  name?: string;
-  label?: string;
-  debut?: string;
-  members?: string[];
+  Name?: string;
+  Label?: string;
+  Debut?: string;
+  Members?: string[];
   diceCoeff?: number;
 }
 

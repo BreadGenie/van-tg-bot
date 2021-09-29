@@ -20,14 +20,14 @@ export const scrapeGroup = async (
 
     const scrapedGroup: ScrapedGroup = {
       picLink,
-      name: $('.profile-top h2').text().trim(),
+      Name: $('.profile-top h2').text().trim(),
     };
 
-    scrapedGroup[`${$('p > .label').parent().prev().text().toLowerCase()}`] =
+    scrapedGroup[`${$('p > .label').parent().prev().text()}`] =
       $('p > .label').text();
 
     $('.half p').each((i, el) => {
-      scrapedGroup[`${$(el).prev().text().toLowerCase()}`] = $(el).text();
+      scrapedGroup[`${$(el).prev().text()}`] = $(el).text();
     });
 
     const members: string[] = [];
@@ -36,7 +36,7 @@ export const scrapeGroup = async (
       members.push($(el).text());
     });
 
-    scrapedGroup['members'] = members;
+    scrapedGroup['Members'] = members;
 
     scrapedGroup['diceCoeff'] = foundGroup[i]['diceCoeff'];
 

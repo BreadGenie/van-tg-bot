@@ -11,24 +11,24 @@ describe('/idol tests', () => {
   test('should check if idol details are returned properly (group)', async () => {
     const result = await searchIdol('jin bts');
     if (typeof result !== 'string') {
-      const { picLink, name, group, label } = result;
+      const { picLink, name, Group, Label } = result;
 
       expect(picLink).toMatch(/https:\/\/image.kpopmap.com\/(.*).(jpg|png)/);
       expect(name).toBe('Jin (Kim SeokJin / 김석진)');
-      expect(group).toBe('BTS');
-      expect(label).toBe('BIGHIT MUSIC');
+      expect(Group).toBe('BTS');
+      expect(Label).toBe('BIGHIT MUSIC');
     }
   });
 
   test('should check if idol details are returned properly (solo)', async () => {
     const result = await searchIdol('IU');
     if (typeof result !== 'string') {
-      const { picLink, name, label, nationality } = result;
+      const { picLink, name, Label, Nationality } = result;
 
       expect(picLink).toMatch(/https:\/\/image.kpopmap.com\/(.*).(jpg|png)/);
       expect(name).toBe('IU (Lee JiEun / 이지은)');
-      expect(label).toBe('EDAM Entertainment LOEN');
-      expect(nationality).toBe('Korean');
+      expect(Label).toBe('EDAM Entertainment LOEN');
+      expect(Nationality).toBe('Korean');
     }
   });
 

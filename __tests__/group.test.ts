@@ -11,12 +11,12 @@ describe('/group tests', () => {
   test('should check if group details are returned properly', async () => {
     const result = await searchGroup('bts');
     if (typeof result !== 'string') {
-      const { picLink, name, label, members } = result;
+      const { picLink, Name, Label, Members } = result;
 
       expect(picLink).toMatch(/https:\/\/image.kpopmap.com\/(.*).jpg/);
-      expect(name).toBe('BTS (방탄소년단)');
-      expect(label).toBe('BIGHIT MUSIC');
-      expect(members).toStrictEqual([
+      expect(Name).toBe('BTS (방탄소년단)');
+      expect(Label).toBe('BIGHIT MUSIC');
+      expect(Members).toStrictEqual([
         'Jin',
         'Suga',
         'J-Hope',

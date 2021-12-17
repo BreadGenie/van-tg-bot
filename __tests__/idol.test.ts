@@ -47,7 +47,7 @@ describe('/idol tests', () => {
   });
 
   test('should output idol not found if no idol found in the site', async () => {
-    const output = await searchIdol('BreadGenie');
+    const output = await searchIdol('asdfghjkl');
 
     expect(output).toBe(NO_ID);
   });

@@ -41,7 +41,7 @@ describe('/idol tests', () => {
   test('should output multiple idol names when there are multiple entries in the site', async () => {
     const output = await searchIdol('jin');
     const final =
-      'Found Multiple Results:\n\nJin - MVP\nJin\nJin\nJin - BTS\n\nUse /idol &lt;idol-name&gt; &lt;group-name&gt;';
+      'Found Multiple Results:\n\nJin - BTS\nJin - MVP\nJin\nJin\n\nUse /idol &lt;idol-name&gt; &lt;group-name&gt;';
 
     expect(output).toBe(final);
   });

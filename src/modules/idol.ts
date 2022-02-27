@@ -65,15 +65,20 @@ export const searchIdol = async (
     const rawdata = readFileSync('idols.json');
     const idols: Idol[] = JSON.parse(rawdata.toString());
 
-    const idolArray = findIdol.includes(' ')
-      ? idols.map(({ idolName, idolGroup }) =>
-          `${idolName} ${idolGroup}`.trim()
-        )
-      : idols.map(({ idolName }) => idolName.trim());
+    const idolArray =
+      findIdol.includes(' ') || findIdol.includes('--')
+        ? idols.map(({ idolName, idolGroup }) =>
+            `${idolName} ${idolGroup}`.trim()
+          )
+        : idols.map(({ idolName }) => idolName.trim());
 
-    const { bestMatch } = matchStringArray(findIdol.toLowerCase(), idolArray, {
-      maxBestMatch: 4,
-    });
+    const { bestMatch } = matchStringArray(
+      findIdol.toLowerCase().replace(/--/g, ' '),
+      idolArray,
+      {
+        maxBestMatch: 4,
+      }
+    );
 
     for (let i = 0; i < bestMatch.length - 1; i++) {
       if (bestMatch[i].diceCoeff !== bestMatch[i + 1].diceCoeff) {
@@ -83,16 +88,20 @@ export const searchIdol = async (
     }
 
     if (bestMatch[0].diceCoeff > 0.5) {
+      const botId = process.env.BOT_ID || 'VanBT21_Bot';
+
       if (bestMatch.length !== 1 && !findIdol.includes(' ')) {
         let multGrpMsg = 'Found Multiple Results:\n\n';
         bestMatch.forEach((match) => {
-          multGrpMsg += `${idols[match.index].idolName
+          let idolName = `${idols[match.index].idolName
             .charAt(0)
             .toUpperCase()}${idols[match.index].idolName.slice(1)}`;
+          multGrpMsg += `<a href='https://t.me/${botId}?start=ID${idolName}`;
 
-          if (idols[match.index].idolGroup.trim())
-            multGrpMsg += ` - ${idols[match.index].idolGroup.toUpperCase()}\n`;
-          else multGrpMsg += `\n`;
+          if (idols[match.index].idolGroup.trim()) {
+            const groupName = idols[match.index].idolGroup.toUpperCase();
+            multGrpMsg += `--${groupName}'>${idolName} - ${groupName}</a>\n`;
+          } else multGrpMsg += `'>${idolName}</a>\n`;
         });
         return `${multGrpMsg}\nUse /idol &lt;idol-name&gt; &lt;group-name&gt;`;
       }

@@ -58,9 +58,21 @@ bot.onText(/^\/help($|@VanBT21_Bot)/, (msg) => {
   help(bot, msg);
 });
 
-bot.onText(/^\/start($|@VanBT21_Bot)/, async (msg) => {
-  if (!('forward_from' in msg)) {
+bot.onText(/^\/start($|@VanBT21_Bot)? ?(.*)/, async (msg, command) => {
+  if (!('forward_from' in msg) && !command[2]) {
     await sendReply(bot, msg, START_STRING);
+  } else {
+    if (command[2].startsWith('GP')) {
+      const result: string | ScrapedGroup = await searchGroup(
+        command[2].substring(2)
+      );
+      await sendReply(bot, msg, result);
+    } else if (command[2].startsWith('ID')) {
+      const result: string | ScrapedIdol = await searchIdol(
+        command[2].substring(2)
+      );
+      await sendReply(bot, msg, result);
+    }
   }
 });
 

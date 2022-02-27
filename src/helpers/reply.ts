@@ -3,6 +3,8 @@ import { ScrapedGroup, ScrapedIdol } from '../types';
 
 export const prettifyReply = (result: ScrapedIdol | ScrapedGroup): string => {
   let description = ``;
+  const botId = process.env.BOT_ID || 'VanBT21_Bot';
+
   if (!('Members' in result)) {
     let idolKeys = Object.keys(result);
 
@@ -13,11 +15,14 @@ export const prettifyReply = (result: ScrapedIdol | ScrapedGroup): string => {
     idolKeys = Object.keys(result);
 
     for (let i = 1; i < idolKeys.length - 2; i++) {
-      if (i === 1)
-        description += `<u>Idol</u>\n\n<i>${result[idolKeys[i]]}</i>\n\n`;
+      const res = result[idolKeys[i]];
+
+      if (i === 1) description += `<u>Idol</u>\n\n<i>${res}</i>\n\n`;
+      else if (idolKeys[i] === 'Group')
+        description += `<b>${idolKeys[i]}:</b> <a href='https://t.me/${botId}?start=GP${res}'>${res}</a>\n`;
       else if (idolKeys[i] !== 'description')
-        description += `<b>${idolKeys[i]}:</b> ${result[idolKeys[i]]}\n`;
-      else description += `\n${result[idolKeys[i]]}\n\n`;
+        description += `<b>${idolKeys[i]}:</b> ${res}\n`;
+      else description += `\n${res}\n\n`;
     }
     if ('sns' in result) {
       description += `<b>${idolKeys[idolKeys.length - 2]}:</b>\n`;
@@ -30,6 +35,7 @@ export const prettifyReply = (result: ScrapedIdol | ScrapedGroup): string => {
     }
   } else {
     const groupKeys = Object.keys(result);
+    const groupName = result['Name'];
 
     for (let i = 1; i < groupKeys.length - 1; i++) {
       if (i !== groupKeys.length - 2)
@@ -37,7 +43,10 @@ export const prettifyReply = (result: ScrapedIdol | ScrapedGroup): string => {
       else {
         description += `<b>${groupKeys[i]}:</b>\n`;
         result[groupKeys[i]].forEach((member: string) => {
-          description += `<code>${member}</code>\n`;
+          description += `<a href='https://t.me/${botId}?start=ID${member.replace(
+            /\s/g,
+            ''
+          )}--${groupName.split(' ')[0]}'>${member}</a>\n`;
         });
       }
     }

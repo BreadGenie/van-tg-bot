@@ -20,7 +20,7 @@ export const scrapeGroup = async (
 
     const scrapedGroup: ScrapedGroup = {
       picLink,
-      Name: $('.profile-top h2').text().trim(),
+      name: $('.profile-top h2').text().trim(),
     };
 
     scrapedGroup[`${$('p > .label').parent().prev().text()}`] =

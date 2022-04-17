@@ -46,7 +46,9 @@ export const prettifyReply = (result: ScrapedIdol | ScrapedGroup): string => {
     const groupKeys = Object.keys(result);
     const groupName = result['name'];
 
-    for (let i = 1; i < groupKeys.length - 1; i++) {
+    description += `<u>Group</u>\n\n<i>${groupName}</i>\n\n`;
+
+    for (let i = 2; i < groupKeys.length - 1; i++) {
       if (i !== groupKeys.length - 2)
         description += `<b>${groupKeys[i]}:</b> ${result[groupKeys[i]]}\n`;
       else {

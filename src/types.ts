@@ -27,7 +27,7 @@ export interface ScrapedIdol {
 
 export interface ScrapedGroup {
   picLink: string;
-  Name?: string;
+  name?: string;
   Label?: string;
   Debut?: string;
   Members?: string[];

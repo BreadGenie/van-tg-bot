@@ -5,7 +5,7 @@ export const prettifyReply = (result: ScrapedIdol | ScrapedGroup): string => {
   let description = ``;
   const botId = process.env.BOT_ID || 'VanBT21_Bot';
 
-  if (!('members' in result)) {
+  if (!('Members' in result)) {
     let idolKeys = Object.keys(result);
 
     for (let i = 1; i < idolKeys.length - 2; i++) {

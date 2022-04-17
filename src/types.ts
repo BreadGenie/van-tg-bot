@@ -15,7 +15,7 @@ export interface ScrapedIdol {
   picLink: string;
   name?: string;
   description?: string;
-  Group?: string;
+  Group?: string[];
   Label?: string;
   Nationality?: string;
   Birthdate?: string;

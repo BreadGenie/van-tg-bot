@@ -15,7 +15,7 @@ describe('/idol tests', () => {
 
       expect(picLink).toMatch(/https:\/\/image.kpopmap.com\/(.*).(jpg|png)/);
       expect(name).toBe('Jin (Kim SeokJin / 김석진)');
-      expect(Group).toBe('BTS');
+      expect(Group).toStrictEqual(["BTS"]);
       expect(Label).toBe('BIGHIT MUSIC');
     }
   });

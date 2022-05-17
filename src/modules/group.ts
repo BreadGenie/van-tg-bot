@@ -52,7 +52,7 @@ export const searchGroup = async (
   if (command === '') {
     return SEND_GP;
   } else {
-    const findGroup: string = command.toLowerCase();
+    const findGroup: string = command.toLowerCase().replace(/--/g, ' ');
 
     const rawdata: Buffer = readFileSync('groups.json');
     const groups: Group[] = JSON.parse(rawdata.toString());

@@ -19,17 +19,17 @@ export const prettifyReply = (result: ScrapedIdol | ScrapedGroup): string => {
       const res = result[idolKeys[i]];
 
       if (i === 1) description += `<u>Idol</u>\n\n<i>${res}</i>\n\n`;
-      else if (idolKeys[i] === 'Group')
-        {
-          description += `<b>${idolKeys[i]}:</b> `;
-          res.forEach((gp, i) => {
-            description += `<a href='https://t.me/${botId}?start=GP${gp}'>${gp}</a>`;
-            if (res.length > i + 1)
-              description += ", ";
-          });
-          description += '\n';
-        }
-      else if (idolKeys[i] !== 'description')
+      else if (idolKeys[i] === 'Group') {
+        description += `<b>${idolKeys[i]}:</b> `;
+        res.forEach((gp, i) => {
+          description += `<a href='https://t.me/${botId}?start=GP${gp.replace(
+            /\s/g,
+            '--'
+          )}'>${gp}</a>`;
+          if (res.length > i + 1) description += ', ';
+        });
+        description += '\n';
+      } else if (idolKeys[i] !== 'description')
         description += `<b>${idolKeys[i]}:</b> ${res}\n`;
       else description += `\n${res}\n\n`;
     }
@@ -56,7 +56,7 @@ export const prettifyReply = (result: ScrapedIdol | ScrapedGroup): string => {
         result[groupKeys[i]].forEach((member: string) => {
           description += `<a href='https://t.me/${botId}?start=ID${member.replace(
             /\s/g,
-            ''
+            '--'
           )}--${groupName.split(' ')[0]}'>${member}</a>\n`;
         });
       }

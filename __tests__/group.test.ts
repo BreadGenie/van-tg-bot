@@ -13,7 +13,7 @@ describe('/group tests', () => {
     if (typeof result !== 'string') {
       const { picLink, name, Label, Members } = result;
 
-      expect(picLink).toMatch(/https:\/\/image.kpopmap.com\/(.*).jpg/);
+      expect(picLink).toMatch(/https:\/\/image.kpopmap.com\/(.*).(jpg|png)/);
       expect(name).toBe('BTS (방탄소년단)');
       expect(Label).toBe('BIGHIT MUSIC');
       expect(Members).toStrictEqual([

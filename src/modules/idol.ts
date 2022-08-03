@@ -48,6 +48,9 @@ export const scrapeIdol = async (
       scrapedIdol['sns'] = sns;
     }
 
+    if ($('.profile-item .group').text() !== '')
+      scrapedIdol['Ex. Group'] = $('.profile-item .group').first().text().split(', ');
+
     scrapedIdol['diceCoeff'] = foundIdols[i]['diceCoeff'];
 
     scrapedIdols.push(scrapedIdol);

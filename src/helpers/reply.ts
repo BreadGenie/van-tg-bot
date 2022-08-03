@@ -19,7 +19,7 @@ export const prettifyReply = (result: ScrapedIdol | ScrapedGroup): string => {
       const res = result[idolKeys[i]];
 
       if (i === 1) description += `<u>Idol</u>\n\n<i>${res}</i>\n\n`;
-      else if (idolKeys[i] === 'Group') {
+      else if (idolKeys[i] === 'Group' || idolKeys[i] === 'Ex. Group') {
         description += `<b>${idolKeys[i]}:</b> `;
         res.forEach((gp, i) => {
           description += `<a href='https://t.me/${botId}?start=GP${gp.replace(

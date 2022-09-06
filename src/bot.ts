@@ -33,7 +33,7 @@ const options: TelegramBot.WebHookOptions | unknown =
 
 const bot = new TelegramBot(token, options);
 
-bot.setWebHook(`${url}/bot${token}`);
+if (port !== undefined) bot.setWebHook(`${url}/bot${token}`);
 
 (async () => {
   await scrapeNStore();

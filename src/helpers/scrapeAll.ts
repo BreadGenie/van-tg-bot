@@ -29,12 +29,14 @@ export const scrapeGroupList = async (): Promise<void> => {
   const $ = cheerio.load(groupBody);
   const groups = [];
 
-  $('.name a').each((i, el) => {
-    groups.push({
-      groupName: $(el).text().toLowerCase(),
-      groupLink: $(el).attr('href'),
+  $('.name a')
+    .not('.label')
+    .each((i, el) => {
+      groups.push({
+        groupName: $(el).text().toLowerCase(),
+        groupLink: $(el).attr('href'),
+      });
     });
-  });
 
   writeFileSync('groups.json', JSON.stringify(groups));
 };

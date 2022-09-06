@@ -14,14 +14,15 @@ import { START_STRING } from './helpers/strings';
 dotenv.config();
 
 const token: string = process.env.TELEGRAM_TOKEN;
+const port: string | undefined = process.env.PORT;
+const env = process.env.NODE_ENV;
 const url: string =
   process.env.APP_URL ||
   process.env.RENDER_EXTERNAL_URL ||
   `https://${process.env.RAILWAY_STATIC_URL}`;
-const port: string | undefined = process.env.PORT;
 
 const options: TelegramBot.WebHookOptions | unknown =
-  port === undefined
+  env !== 'production'
     ? {
         polling: true,
       }
@@ -33,7 +34,7 @@ const options: TelegramBot.WebHookOptions | unknown =
 
 const bot = new TelegramBot(token, options);
 
-if (port !== undefined) bot.setWebHook(`${url}/bot${token}`);
+if (env === 'production') bot.setWebHook(`${url}/bot${token}`);
 
 (async () => {
   await scrapeNStore();

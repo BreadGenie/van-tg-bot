@@ -25,7 +25,10 @@ export const scrapeIdol = async (
     };
 
     if ($('.profile-top .group').text() !== '')
-      scrapedIdol['Group'] = $('.profile-top span .group').first().text().split(', ');
+      scrapedIdol['Group'] = $('.profile-top span .group')
+        .first()
+        .text()
+        .split(', ');
 
     if ($('.full.desc p')) {
       scrapedIdol.description = $('.full.desc p').text();
@@ -49,7 +52,10 @@ export const scrapeIdol = async (
     }
 
     if ($('.profile-item .group').text() !== '')
-      scrapedIdol['Ex. Group'] = $('.profile-item .group').first().text().split(', ');
+      scrapedIdol['Ex. Group'] = $('.profile-item .group')
+        .first()
+        .text()
+        .split(', ');
 
     scrapedIdol['diceCoeff'] = foundIdols[i]['diceCoeff'];
 
@@ -96,7 +102,7 @@ export const searchIdol = async (
       if (bestMatch.length !== 1 && !findIdol.includes(' ')) {
         let multGrpMsg = 'Found Multiple Results:\n\n';
         bestMatch.forEach((match) => {
-          let idolName = `${idols[match.index].idolName
+          const idolName = `${idols[match.index].idolName
             .charAt(0)
             .toUpperCase()}${idols[match.index].idolName.slice(1)}`;
           multGrpMsg += `<a href='https://t.me/${botId}?start=ID${idolName}`;

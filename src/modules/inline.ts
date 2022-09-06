@@ -121,7 +121,7 @@ export const inline = async (
     return match !== undefined;
   });
 
-  if (filteredMatches !== []) {
+  if (filteredMatches.length !== 0) {
     const output = await getInlineResult(query, filteredMatches);
     bot.answerInlineQuery(query.id, output);
   } else {

@@ -15,9 +15,9 @@ dotenv.config();
 
 const token: string = process.env.TELEGRAM_TOKEN;
 const url: string =
+  process.env.APP_URL ||
   process.env.RENDER_EXTERNAL_URL ||
-  `https://${process.env.RAILWAY_STATIC_URL}` ||
-  process.env.APP_URL;
+  `https://${process.env.RAILWAY_STATIC_URL}`;
 const port: string | undefined = process.env.PORT;
 
 const options: TelegramBot.WebHookOptions | unknown =

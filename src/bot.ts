@@ -1,6 +1,8 @@
 import TelegramBot = require('node-telegram-bot-api');
 import cron = require('node-cron');
+import express from 'express';
 import * as dotenv from 'dotenv';
+
 import help from './modules/help';
 import { searchGroup } from './modules/group';
 import { searchIdol } from './modules/idol';
@@ -13,8 +15,10 @@ import { START_STRING } from './helpers/strings';
 
 dotenv.config();
 
+const app = express();
+
 const token: string = process.env.TELEGRAM_TOKEN;
-const port: string | undefined = process.env.PORT;
+const port: string = process.env.PORT || '3001';
 const env = process.env.NODE_ENV;
 const url: string =
   process.env.APP_URL ||
@@ -42,6 +46,14 @@ if (env === 'production') bot.setWebHook(`${url}/bot${token}`);
 
 cron.schedule('0 0 * * *', async () => {
   await scrapeNStore();
+});
+
+app.get(`/health`, (req, res) => {
+  res.sendStatus(200);
+});
+
+app.listen(port, () => {
+  console.log(`Express server is listening on ${port}`);
 });
 
 bot.on('inline_query', async (query) => {

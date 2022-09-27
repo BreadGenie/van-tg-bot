@@ -17,6 +17,8 @@ dotenv.config();
 
 const app = express();
 
+app.use(express.json());
+
 const token: string = process.env.TELEGRAM_TOKEN;
 const port: string = process.env.PORT || '3001';
 const env = process.env.NODE_ENV;
@@ -25,16 +27,12 @@ const url: string =
   process.env.RENDER_EXTERNAL_URL ||
   `https://${process.env.RAILWAY_STATIC_URL}`;
 
-const options: TelegramBot.WebHookOptions | unknown =
+const options: TelegramBot.ConstructorOptions =
   env !== 'production'
     ? {
         polling: true,
       }
-    : {
-        webHook: {
-          port,
-        },
-      };
+    : {};
 
 const bot = new TelegramBot(token, options);
 
@@ -49,6 +47,11 @@ cron.schedule('0 0 * * *', async () => {
 });
 
 app.get(`/health`, (req, res) => {
+  res.sendStatus(200);
+});
+
+app.post(`/bot${token}`, (req, res) => {
+  bot.processUpdate(req.body);
   res.sendStatus(200);
 });
 

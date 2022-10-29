@@ -1,9 +1,15 @@
 import cheerio from 'cheerio';
-import fetch from 'node-fetch';
 import { writeFileSync } from 'fs';
 
+import { fetch } from './fetch';
+
 export const scrapeIdolList = async (): Promise<void> => {
-  const idolResult = await fetch('https://www.kpopmap.com/kpop-profile/');
+  const idolResult = await fetch('https://www.kpopmap.com/kpop-profile/', {
+    headers: {
+      'user-agent':
+        'Mozilla/5.0 (X11; Linux x86_64; rv:105.0) Gecko/20100101 Firefox/105.0',
+    },
+  });
   const idolBody = await idolResult.text();
 
   const $ = cheerio.load(idolBody);
@@ -17,12 +23,18 @@ export const scrapeIdolList = async (): Promise<void> => {
     });
   });
 
-  writeFileSync('idols.json', JSON.stringify(idols));
+  if (idols.length > 0) writeFileSync('idols.json', JSON.stringify(idols));
 };
 
 export const scrapeGroupList = async (): Promise<void> => {
   const groupResult = await fetch(
-    'https://www.kpopmap.com/kpop-member-profile/'
+    'https://www.kpopmap.com/kpop-member-profile/',
+    {
+      headers: {
+        'user-agent':
+          'Mozilla/5.0 (X11; Linux x86_64; rv:105.0) Gecko/20100101 Firefox/105.0',
+      },
+    }
   );
   const groupBody = await groupResult.text();
 
@@ -38,7 +50,7 @@ export const scrapeGroupList = async (): Promise<void> => {
       });
     });
 
-  writeFileSync('groups.json', JSON.stringify(groups));
+  if (groups.length > 0) writeFileSync('groups.json', JSON.stringify(groups));
 };
 
 export const scrapeNStore = async (): Promise<void> => {

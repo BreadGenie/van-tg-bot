@@ -1,9 +1,10 @@
 import cheerio from 'cheerio';
-import fetch from 'node-fetch';
+
 import { readFileSync } from 'fs';
 import { SEND_ID, NO_ID } from '../helpers/strings';
 import { Idol, ScrapedIdol } from '../types';
 import { matchStringArray } from '../helpers/dice';
+import { fetch } from '../helpers/fetch';
 
 export const scrapeIdol = async (
   foundIdols: Idol[]

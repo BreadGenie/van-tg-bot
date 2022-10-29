@@ -1,9 +1,10 @@
 import cheerio from 'cheerio';
-import fetch from 'node-fetch';
 import { readFileSync } from 'fs';
+
 import { SEND_GP, NO_GP } from '../helpers/strings';
 import { Group, ScrapedGroup } from '../types';
 import { matchStringArray } from '../helpers/dice';
+import { fetch } from '../helpers/fetch';
 
 export const scrapeGroup = async (
   foundGroup: Group[]

@@ -15,7 +15,7 @@ describe('/idol tests', () => {
 
       expect(picLink).toMatch(/https:\/\/image.kpopmap.com\/(.*).(jpg|png)/);
       expect(name).toBe('Jin (Kim SeokJin / 김석진)');
-      expect(Group).toStrictEqual(["BTS"]);
+      expect(Group).toStrictEqual(['BTS']);
       expect(Label).toBe('BIGHIT MUSIC');
     }
   });
@@ -40,10 +40,19 @@ describe('/idol tests', () => {
 
   test('should output multiple idol names when there are multiple entries in the site', async () => {
     const output = await searchIdol('jin');
-    const final =
-      "Found Multiple Results:\n\n<a href='https://t.me/VanBT21_Bot?start=IDJin--MVP'>Jin - MVP</a>\n<a href='https://t.me/VanBT21_Bot?start=IDJin'>Jin</a>\n<a href='https://t.me/VanBT21_Bot?start=IDJin'>Jin</a>\n<a href='https://t.me/VanBT21_Bot?start=IDJin--BTS'>Jin - BTS</a>\n\nUse /idol &lt;idol-name&gt; &lt;group-name&gt;";
+    const splittedOutput = typeof output === 'string' ? output.split('\n') : [];
+    const final = [
+      'Found Multiple Results:',
+      '',
+      "<a href='https://t.me/VanBT21_Bot?start=IDJin--MVP'>Jin - MVP</a>",
+      "<a href='https://t.me/VanBT21_Bot?start=IDJin'>Jin</a>",
+      "<a href='https://t.me/VanBT21_Bot?start=IDJin'>Jin</a>",
+      "<a href='https://t.me/VanBT21_Bot?start=IDJin--BTS'>Jin - BTS</a>",
+      '',
+      'Use /idol &lt;idol-name&gt; &lt;group-name&gt;',
+    ];
 
-    expect(output).toBe(final);
+    expect(splittedOutput.sort()).toEqual(final.sort());
   });
 
   test('should output idol not found if no idol found in the site', async () => {

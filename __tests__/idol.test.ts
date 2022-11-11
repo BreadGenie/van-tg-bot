@@ -44,7 +44,7 @@ describe('/idol tests', () => {
     const final = [
       'Found Multiple Results:',
       '',
-      "<a href='https://t.me/VanBT21_Bot?start=IDJin--MVP'>Jin - MVP</a>",
+      "<a href='https://t.me/VanBT21_Bot?start=IDJin'>Jin</a>",
       "<a href='https://t.me/VanBT21_Bot?start=IDJin'>Jin</a>",
       "<a href='https://t.me/VanBT21_Bot?start=IDJin'>Jin</a>",
       "<a href='https://t.me/VanBT21_Bot?start=IDJin--BTS'>Jin - BTS</a>",

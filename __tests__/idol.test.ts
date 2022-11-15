@@ -39,15 +39,13 @@ describe('/idol tests', () => {
   });
 
   test('should output multiple idol names when there are multiple entries in the site', async () => {
-    const output = await searchIdol('jin');
+    const output = await searchIdol('taeil');
     const splittedOutput = typeof output === 'string' ? output.split('\n') : [];
     const final = [
       'Found Multiple Results:',
       '',
-      "<a href='https://t.me/VanBT21_Bot?start=IDJin'>Jin</a>",
-      "<a href='https://t.me/VanBT21_Bot?start=IDJin'>Jin</a>",
-      "<a href='https://t.me/VanBT21_Bot?start=IDJin'>Jin</a>",
-      "<a href='https://t.me/VanBT21_Bot?start=IDJin--BTS'>Jin - BTS</a>",
+      "<a href='https://t.me/VanBT21_Bot?start=IDTaeil--BLOCK B'>Taeil - BLOCK B</a>",
+      "<a href='https://t.me/VanBT21_Bot?start=IDTaeil--NCT'>Taeil - NCT</a>",
       '',
       'Use /idol &lt;idol-name&gt; &lt;group-name&gt;',
     ];

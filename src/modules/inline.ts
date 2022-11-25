@@ -29,9 +29,9 @@ const getInlineResult = async (
       if ('member' in result) {
         const linkedGroupName = `<a href='${result['picLink']}'>${name}</a>`;
         messageText = prettifyReply(result).replace(name, linkedGroupName);
-        description = 'label' in result ? result['label'] : '';
+        description = 'Label' in result ? result['Label'] : '';
       } else {
-        description = 'group' in result ? result['group'] : '';
+        description = 'Group' in result ? result['Group'].join(',') : '';
 
         const linkedIdolName = `<a href='${result['picLink']}'>${name}</a>`;
         messageText = prettifyReply(result).replace(name, linkedIdolName);

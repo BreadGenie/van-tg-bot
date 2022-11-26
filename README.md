@@ -2,7 +2,7 @@
 ### A K-Pop Telegram Bot
 
 [![Find me on Telegram](https://img.shields.io/badge/telegram-@VanBT21_Bot-6a4dff.svg)](https://telegram.me/VanBT21_Bot)
-[![Build Status](https://img.shields.io/github/workflow/status/breadgenie/van-tg-bot/Node.js%20CI)](https://github.com/BreadGenie/van-tg-bot/actions)
+[![Tests Status](https://img.shields.io/github/workflow/status/breadgenie/van-tg-bot/Node.js%20CI?label=tests)](https://github.com/BreadGenie/van-tg-bot/actions)
 [![LICENSE](https://img.shields.io/github/license/breadgenie/van-tg-bot)](https://github.com/BreadGenie/van-tg-bot/blob/master/LICENSE)
 
 ![vanconfetti](https://user-images.githubusercontent.com/63963181/123435478-3cdbca00-d5eb-11eb-8a7f-88e8a856026a.gif)

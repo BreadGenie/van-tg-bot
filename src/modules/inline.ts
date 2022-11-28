@@ -47,6 +47,16 @@ const getInlineResult = async (
           message_text: messageText,
           parse_mode: 'HTML',
         },
+        reply_markup: {
+          inline_keyboard: [
+            [
+              {
+                text: 'Search Again',
+                switch_inline_query_current_chat: query.query,
+              },
+            ],
+          ],
+        },
       });
     }
   );
@@ -136,6 +146,16 @@ export const inline = async (
           message_text:
             'Check the search query and ensure it is their proper stage name!',
           parse_mode: 'HTML',
+        },
+        reply_markup: {
+          inline_keyboard: [
+            [
+              {
+                text: 'Search Again',
+                switch_inline_query_current_chat: command,
+              },
+            ],
+          ],
         },
       },
     ];

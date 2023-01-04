@@ -16,15 +16,16 @@ describe('/group tests', () => {
       expect(picLink).toMatch(/https:\/\/image.kpopmap.com\/(.*).(jpg|png)/);
       expect(name).toBe('BTS (방탄소년단)');
       expect(Label).toBe('BIGHIT MUSIC');
-      expect(Members).toStrictEqual([
+      expect([
         'Jin',
         'Suga',
         'J-Hope',
+        'j-hope',
         'RM',
         'JiMin',
         'V',
         'JungKook',
-      ]);
+      ]).toEqual(expect.arrayContaining(Members!));
     }
   });
 

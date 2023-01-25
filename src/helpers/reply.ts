@@ -22,10 +22,10 @@ export const prettifyReply = (result: ScrapedIdol | ScrapedGroup): string => {
       else if (idolKeys[i] === 'Group' || idolKeys[i] === 'Ex. Group') {
         description += `<b>${idolKeys[i]}:</b> `;
         res.forEach((gp, i) => {
-          description += `<a href='https://t.me/${botId}?start=GP${gp.replace(
+          description += `<a href="https://t.me/${botId}?start=GP${gp.replace(
             /\s/g,
             '--'
-          )}'>${gp}</a>`;
+          )}">${gp}</a>`;
           if (res.length > i + 1) description += ', ';
         });
         description += '\n';
@@ -37,7 +37,7 @@ export const prettifyReply = (result: ScrapedIdol | ScrapedGroup): string => {
       description += `<b>${idolKeys[idolKeys.length - 2]}:</b>\n`;
       const snsKeys = Object.keys(result['sns']);
       for (let i = 0; i < snsKeys.length; i++) {
-        description += `<a href='${result['sns'][`${snsKeys[i]}`]}'>${
+        description += `<a href="${result['sns'][`${snsKeys[i]}`]}">${
           snsKeys[i]
         }</a>\n`;
       }
@@ -54,10 +54,10 @@ export const prettifyReply = (result: ScrapedIdol | ScrapedGroup): string => {
       else {
         description += `<b>${groupKeys[i]}:</b>\n`;
         result[groupKeys[i]].forEach((member: string) => {
-          description += `<a href='https://t.me/${botId}?start=ID${member.replace(
+          description += `<a href="https://t.me/${botId}?start=ID${member.replace(
             /\s/g,
             '--'
-          )}--${groupName.split(' ')[0]}'>${member}</a>\n`;
+          )}--${groupName.split(' ')[0]}">${member}</a>\n`;
         });
       }
     }

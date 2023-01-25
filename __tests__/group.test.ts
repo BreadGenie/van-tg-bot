@@ -5,7 +5,7 @@ import { existsSync } from 'fs';
 
 describe('/group tests', () => {
   beforeAll(async () => {
-    if (!existsSync('groups.json')) return await scrapeGroupList();
+    if (!existsSync('groups.json')) return await scrapeGroupList(['b']);
   });
 
   test('should check if group details are returned properly', async () => {

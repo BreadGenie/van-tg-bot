@@ -5,13 +5,7 @@ import { scrapeGroup } from './group';
 import { scrapeIdol } from './idol';
 import { matchStringArray } from '../helpers/dice';
 import { prettifyReply } from '../helpers/reply';
-
-const waitFor = (ms: number) => new Promise((r) => setTimeout(r, ms));
-const asyncForEach = async (array: string[] | ScrapedIdol[], callback) => {
-  for (let index = 0; index < array.length; index++) {
-    await callback(array[index], index, array);
-  }
-};
+import { asyncForEach, waitFor } from '../helpers/asyncForEach';
 
 const getInlineResult = async (
   query: { query: string; id: string },

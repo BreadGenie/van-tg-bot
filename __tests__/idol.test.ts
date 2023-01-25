@@ -5,30 +5,30 @@ import { existsSync } from 'fs';
 
 describe('/idol tests', () => {
   beforeAll(async () => {
-    if (!existsSync('idols.json')) return await scrapeIdolList();
+    if (!existsSync('idols.json')) return await scrapeIdolList(['t']);
   });
 
   test('should check if idol details are returned properly (group)', async () => {
-    const result = await searchIdol('jin bts');
+    const result = await searchIdol('taeyeon');
     if (typeof result !== 'string') {
       const { picLink, name, Group, Label } = result;
 
       expect(picLink).toMatch(/https:\/\/image.kpopmap.com\/(.*).(jpg|png)/);
-      expect(name).toBe('Jin (Kim SeokJin / 김석진)');
-      expect(Group).toStrictEqual(['BTS']);
-      expect(Label).toBe('BIGHIT MUSIC');
+      expect(name).toBe('TaeYeon (Kim TaeYeon / 김태연)');
+      expect(Group).toStrictEqual(["OH!GG", "Girls' Generation", "Girls On Top", "Girls Generation TTS"]);
+      expect(Label).toBe('SM');
     }
   });
 
   test('should check if idol details are returned properly (solo)', async () => {
-    const result = await searchIdol('IU');
+    const result = await searchIdol('Tiffany Young');
     if (typeof result !== 'string') {
       const { picLink, name, Label, Nationality } = result;
 
       expect(picLink).toMatch(/https:\/\/image.kpopmap.com\/(.*).(jpg|png)/);
-      expect(name).toBe('IU (Lee JiEun / 이지은)');
-      expect(Label).toBe('EDAM Entertainment LOEN');
-      expect(Nationality).toBe('Korean');
+      expect(name).toBe('Tiffany Young (Stephanie Young Hwang / 스테파니 영 황)');
+      expect(Label).toBe('Paradigm Talent SUBLIME ARTIST AGENCY');
+      expect(Nationality).toBe('Korean-American');
     }
   });
 

@@ -1,4 +1,5 @@
 import cheerio from 'cheerio';
+import memoize from 'fast-memoize';
 import { readFileSync } from 'fs';
 
 import { SEND_GP, NO_GP } from '../helpers/strings';
@@ -6,7 +7,7 @@ import { Group, ScrapedGroup } from '../types';
 import { matchStringArray } from '../helpers/dice';
 import { fetch } from '../helpers/fetch';
 
-export const scrapeGroup = async (
+const _scrapeGroup = async (
   foundGroup: Group[]
 ): Promise<ScrapedGroup[]> => {
   const scrapedGroups: ScrapedGroup[] = [];
@@ -46,6 +47,8 @@ export const scrapeGroup = async (
 
   return scrapedGroups;
 };
+
+export const scrapeGroup = memoize(_scrapeGroup);
 
 export const searchGroup = async (
   command: string

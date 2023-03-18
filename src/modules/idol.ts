@@ -1,4 +1,5 @@
 import cheerio from 'cheerio';
+import memoize from 'fast-memoize';
 
 import { readFileSync } from 'fs';
 import { SEND_ID, NO_ID } from '../helpers/strings';
@@ -6,7 +7,7 @@ import { Idol, ScrapedIdol } from '../types';
 import { matchStringArray } from '../helpers/dice';
 import { fetch } from '../helpers/fetch';
 
-export const scrapeIdol = async (
+const _scrapeIdol = async (
   foundIdols: Idol[]
 ): Promise<ScrapedIdol[]> => {
   const scrapedIdols: ScrapedIdol[] = [];
@@ -62,6 +63,8 @@ export const scrapeIdol = async (
 
   return scrapedIdols;
 };
+
+export const scrapeIdol = memoize(_scrapeIdol);
 
 export const searchIdol = async (
   findIdol: string
